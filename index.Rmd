@@ -1,6 +1,6 @@
 --- 
-title: "TEST"
-author: "Dillon Sparks"
+title: "Education and ___"
+author: "Woomy Michel and Dillon Sparks"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
