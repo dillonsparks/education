@@ -1,5 +1,5 @@
 --- 
-title: "Education and ___"
+title: "Education"
 author: "Woomy Michel and Dillon Sparks"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
