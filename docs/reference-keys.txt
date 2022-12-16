@@ -7,5 +7,8 @@ sources
 cleaning-transformation
 missing-value-analysis
 results
+plots-notes-part-1-reading-math-test-scores
+plots-notes-part-2-nyc-student-demographics-indicators-of-success
 interactive-component
 conclusion
+tab:unnamed-chunk-23

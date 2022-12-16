@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Results | Education</title>
-  <meta name="description" content="Chapter 4 Results | Education" />
+  <title>Chapter 5 Plots + notes: Part 1 (Reading &amp; Math test scores) | Education</title>
+  <meta name="description" content="Chapter 5 Plots + notes: Part 1 (Reading &amp; Math test scores) | Education" />
   <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 4 Results | Education" />
+  <meta property="og:title" content="Chapter 5 Plots + notes: Part 1 (Reading &amp; Math test scores) | Education" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Results | Education" />
+  <meta name="twitter:title" content="Chapter 5 Plots + notes: Part 1 (Reading &amp; Math test scores) | Education" />
   
   
   
@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="data.html"/>
+<link rel="prev" href="results.html"/>
 <link rel="next" href="interactive-component.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -84,13 +84,13 @@
 <li class="chapter" data-level="3.2" data-path="data.html"><a href="data.html#cleaning-transformation"><i class="fa fa-check"></i><b>3.2</b> Cleaning / transformation</a></li>
 <li class="chapter" data-level="3.3" data-path="data.html"><a href="data.html#missing-value-analysis"><i class="fa fa-check"></i><b>3.3</b> Missing value analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>4</b> Results</a>
+<li class="chapter" data-level="4" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>4</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="plots-notes-part-1-reading-math-test-scores.html"><a href="plots-notes-part-1-reading-math-test-scores.html"><i class="fa fa-check"></i><b>5</b> Plots + notes: Part 1 (Reading &amp; Math test scores)</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="results.html"><a href="results.html#plots-notes-part-1-reading-math-test-scores"><i class="fa fa-check"></i><b>4.1</b> Plots + notes: Part 1 (Reading &amp; Math test scores)</a></li>
-<li class="chapter" data-level="4.2" data-path="results.html"><a href="results.html#plots-notes-part-2-nyc-student-demographics-indicators-of-success"><i class="fa fa-check"></i><b>4.2</b> Plots + Notes: Part 2 (NYC Student Demographics &amp; Indicators of success)</a></li>
+<li class="chapter" data-level="5.1" data-path="plots-notes-part-1-reading-math-test-scores.html"><a href="plots-notes-part-1-reading-math-test-scores.html#plots-notes-part-2-nyc-student-demographics-indicators-of-success"><i class="fa fa-check"></i><b>5.1</b> Plots + Notes: Part 2 (NYC Student Demographics &amp; Indicators of success)</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>5</b> Interactive component</a></li>
-<li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Conclusion</a></li>
+<li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -110,33 +110,29 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="results" class="section level1 hasAnchor" number="4">
-<h1><span class="header-section-number">Chapter 4</span> Results<a href="results.html#results" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Reading in the cleaned data:</p>
-<div id="plots-notes-part-1-reading-math-test-scores" class="section level2 hasAnchor" number="4.1">
-<h2><span class="header-section-number">4.1</span> Plots + notes: Part 1 (Reading &amp; Math test scores)<a href="results.html#plots-notes-part-1-reading-math-test-scores" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="plots-notes-part-1-reading-math-test-scores" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Plots + notes: Part 1 (Reading &amp; Math test scores)<a href="plots-notes-part-1-reading-math-test-scores.html#plots-notes-part-1-reading-math-test-scores" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>PLOT 1: READING VS MATH (GOAL: SEE IF THERE’S A CORRELATION BETWEEN THE TWO)
 Reading vs math scores across the years; seeing if there’s a correlation between ELA &amp; Math test scores</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>Takeaways: on the surface, reading and math scores seem to have a very strong positive correlation. There is
 also a noticeable drop in scores in 2022 which can probably be attributed to the onset of the Covid-19 pandemic</p>
 <p>PLOT 2: OVERLAPPING HISTOGRAMS OF MATH/ELA SCORES FOR ALL 3 YEARS (GOAL: SEE WHICH STUDENTS PERFORM BETTER ON)</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-33-1.png" width="672" />
+<p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 Overlapping histograms to show relative similarity of distributions of the scores over the years; students seem to perform a bit better on ELA (blue)</p>
 <p>PLOTS 3/4: SCORES OVER THE YEARS BY DISTRICT (GOAL: SEE HOW ONSET OF COVID-19 PANDEMIC IMPACTED SCORES)
 Cleveland dot plot of mean ELA scores &amp; mean Math scores by district</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>There is a lot of variation in scores between districts for both Math &amp; ELA scores; some districts are very high performing relative to the rest of the group. Also, math scores got better from 2018-&gt;2019, but way worse in 2022.ELA scores regressed from 2018-2019, but then improved (almost across the board) in 2022. This is interesting
 Note; the 2018/2019 ELA scores for District 4 are nearly identical, so it looks like we’re missing a year of data</p>
-</div>
-<div id="plots-notes-part-2-nyc-student-demographics-indicators-of-success" class="section level2 hasAnchor" number="4.2">
-<h2><span class="header-section-number">4.2</span> Plots + Notes: Part 2 (NYC Student Demographics &amp; Indicators of success)<a href="results.html#plots-notes-part-2-nyc-student-demographics-indicators-of-success" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="plots-notes-part-2-nyc-student-demographics-indicators-of-success" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Plots + Notes: Part 2 (NYC Student Demographics &amp; Indicators of success)<a href="plots-notes-part-1-reading-math-test-scores.html#plots-notes-part-2-nyc-student-demographics-indicators-of-success" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>PLOT 5: % ENI vs SWD (GOAL: CRITIQUE NYC DOE’S ENI + draw link to funding in takeaways)
-<img src="finalproj_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <p>There seems to be a positive association between ENI and %SWD (as noted by the cluster of light blue, and the trend from dark to lighter). This is interesting because disability status is not one of the explicit factors in calculating a student/school’s ENI (which can be found here <a href="https://data.cccnewyork.org/data/map/1371/student-economic-need-index#1371/a/5/1622/127/a/a" class="uri">https://data.cccnewyork.org/data/map/1371/student-economic-need-index#1371/a/5/1622/127/a/a</a>)</p>
 <p>PLOT 6: BOXPLOTS TO GET A PICTURE OF WHAT RACIAL &amp; % ELL DEMOGRAPHICS LOOK LIKE PER DISTRICT
-<img src="finalproj_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>Takeaways; Most NYC School Districts are majority POC; 1 outlier district</p>
 <pre><code>## [1] 0.5336681</code></pre>
 <pre><code>## [1] 0.5474183</code></pre>
@@ -146,9 +142,9 @@ Note; the 2018/2019 ELA scores for District 4 are nearly identical, so it looks 
 (maybe add a Biplot &amp; do some PCA here)</p>
 <p>ELA first: column indices of interest are 3 (score), 5 (Total Enrollment),13 (% students w/ disabilities), 14 (% English language learners), 16 (% Poverty), 19 (% POC)
 # Adding a Year column so we can add color to distinguish across the years
-<img src="finalproj_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p>MATH second: # ELA first: column indices of interest are 3 (score), 5(Total Enrollment), 13 (% students w/ disabilities), 14 (% English language learners), 15 (% Poverty), 19 (% POC)</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <p>Takeaways: Put scores in the middle to determine the relationship between each variable and performance
 (MEAT OF THE ANALYSIS HERE)</p>
 
@@ -159,7 +155,7 @@ Note; the 2018/2019 ELA scores for District 4 are nearly identical, so it looks 
           </div>
         </div>
       </div>
-<a href="data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="results.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="interactive-component.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

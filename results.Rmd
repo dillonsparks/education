@@ -1,1 +1,149 @@
 # Results
+```{r, include=FALSE}
+library(dplyr)
+library(GGally)
+library(tidyverse)
+library(readxl)
+library(skimr)
+library(ggplot2)
+library(ggridges)
+library(ggpubr)
+```
+
+
+Reading in the cleaned data:
+
+```{r}
+school <- read_csv("../School.csv")
+district <- read_csv("../District.csv")
+```
+
+
+## Plots + notes: Part 1 (Reading & Math test scores)
+
+PLOT 1: READING VS MATH (GOAL: SEE IF THERE'S A CORRELATION BETWEEN THE TWO)
+Reading vs math scores across the years; seeing if there's a correlation between ELA & Math test scores
+
+```{r}
+r_v_m <- ggplot(data = school) +
+       geom_point(aes(x = school$`Mean Scale Score_e`, y = school$`Mean Scale Score_m`, alpha =0.5)) + 
+       xlab('Mean ELA Score') +
+       ylab('Mean Math Score') +
+       ggtitle('Test Scores by School') +
+       facet_wrap(school$Year)
+r_v_m
+```
+
+Takeaways: on the surface, reading and math scores seem to have a very strong positive correlation. There is 
+also a noticeable drop in scores in 2022 which can probably be attributed to the onset of the Covid-19 pandemic 
+
+
+PLOT 2: OVERLAPPING HISTOGRAMS OF MATH/ELA SCORES FOR ALL 3 YEARS (GOAL: SEE WHICH STUDENTS PERFORM BETTER ON)
+
+```{r}
+c1 <- rgb(173,216,230,max = 255, alpha = 80, names = "lt.blue")
+c2 <- rgb(255,192,203, max = 255, alpha = 80, names = "lt.pink")
+
+
+Mean_Scores <- school$`Mean Scale Score_e`
+
+ax <- pretty(550:650, n = 30)
+ela_hist <- hist(Mean_Scores, breaks = ax, plot = FALSE)
+math_hist <- hist(school$`Mean Scale Score_m`, breaks = ax, plot = FALSE)
+plot(ela_hist, col = c1)
+plot(math_hist, col = c2, add = TRUE)
+```
+Overlapping histograms to show relative similarity of distributions of the scores over the years; students seem to perform a bit better on ELA (blue)
+
+PLOTS 3/4: SCORES OVER THE YEARS BY DISTRICT (GOAL: SEE HOW ONSET OF COVID-19 PANDEMIC IMPACTED SCORES)
+Cleveland dot plot of mean ELA scores & mean Math scores by district 
+
+```{r}
+cdp_math <- ggplot(district, aes(x = district$`Mean Scale Score_m`, y = fct_reorder(as.character(district$District), district$`Mean Scale Score_m`), color = as.character(Year))) +
+       geom_point() +
+       ggtitle("Mean Math Scores by District") +
+       theme_linedraw() +
+       xlab(" ") +
+       ylab("District") + 
+       labs(color = "Year")
+cdp_math 
+```
+
+```{r}
+cdp_ela <- ggplot(district, aes(x = district$`Mean Scale Score_e`, y = fct_reorder(as.character(district$District), district$`Mean Scale Score_e`), color = as.character(Year))) +
+      geom_point() +
+      ggtitle("Mean ELA Scores by District") +
+      theme_linedraw() +
+      xlab(" ") +
+      ylab("District") +
+      labs(color = "Year")
+cdp_ela
+```
+
+There is a lot of variation in scores between districts for both Math & ELA scores; some districts are very high performing relative to the rest of the group. Also, math scores got better from 2018->2019, but way worse in 2022.ELA scores regressed from 2018-2019, but then improved (almost across the board) in 2022. This is interesting
+Note; the 2018/2019 ELA scores for District 4 are nearly identical, so it looks like we're missing a year of data 
+
+
+## Plots + Notes: Part 2 (NYC Student Demographics & Indicators of success)
+
+
+PLOT 5: % ENI vs SWD (GOAL: CRITIQUE NYC DOE'S ENI + draw link to funding in takeaways)
+```{r}
+hm2 <- ggplot(school, aes(y = school$`% SWD`, x = school$`ENI`)) + 
+  geom_bin2d() +
+  facet_wrap("Year")
+hm2
+```
+
+There seems to be a positive association between ENI and %SWD (as noted by the cluster of light blue, and the trend from dark to lighter). This is interesting because disability status is not one of the explicit factors in calculating a student/school's ENI (which can be found here https://data.cccnewyork.org/data/map/1371/student-economic-need-index#1371/a/5/1622/127/a/a)
+
+PLOT 6: BOXPLOTS TO GET A PICTURE OF WHAT RACIAL & % ELL DEMOGRAPHICS LOOK LIKE PER DISTRICT
+```{r}
+district$Y <- as.character(district$Year)
+
+ggplot(district, aes(x= district$`% POC`)) +
+  geom_boxplot() +
+  ggtitle("Boxplot of % POC by district") + 
+  facet_wrap(~Y)
+``` 
+
+Takeaways; Most NYC School Districts are majority POC; 1 outlier district
+```{r}
+district %>% filter(Year == 2018) %>% select("% POC") %>% min() 
+district %>% filter(Year == 2019) %>% select("% POC") %>% min()
+district %>% filter(Year == 2022) %>% select("% POC") %>% min()
+
+```
+Shows that it is district 31; performed 11/32 or better in both Math & ELA both years (not overwhelmingly great scores)
+
+PLOTS 7/8: PARALLEL COORDINATE PLOTS BY EXAM SUBJECT (GOAL: SEE WHICH VARIABLES HAVE AN ASSOCIATION WITH TEST SCORE)
+(maybe add a Biplot & do some PCA here)
+
+ELA first: column indices of interest are 3 (score), 5 (Total Enrollment),13 (% students w/ disabilities), 14 (% English language learners), 16 (% Poverty), 19 (% POC)
+# Adding a Year column so we can add color to distinguish across the years
+```{r}
+district$Y <- as.character(district$Year)
+
+ggparcoord(district, 
+           columns = c(13,14,3,19,15,5),
+           title = "Parallel Coordinate Plot for ELA Scores, grouped by Year", 
+           scale='std',
+           groupColumn = 20,
+           splineFactor=10)
+``` 
+
+MATH second: # ELA first: column indices of interest are 3 (score), 5(Total Enrollment), 13 (% students w/ disabilities), 14 (% English language learners), 15 (% Poverty), 19 (% POC)
+
+```{r}
+ggparcoord(district, 
+           columns = c(13,14,4,19,15,5),
+           title = "Parallel Coordinate Plot for Math Scores, grouped by Year",
+           scale='std',
+           groupColumn = 20,
+           splineFactor=10)
+```
+
+Takeaways: Put scores in the middle to determine the relationship between each variable and performance
+(MEAT OF THE ANALYSIS HERE)
+
+

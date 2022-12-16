@@ -23,7 +23,7 @@
 <meta name="author" content="Woomy Michel and Dillon Sparks" />
 
 
-<meta name="date" content="2022-11-01" />
+<meta name="date" content="2022-12-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -84,7 +84,11 @@
 <li class="chapter" data-level="3.2" data-path="data.html"><a href="data.html#cleaning-transformation"><i class="fa fa-check"></i><b>3.2</b> Cleaning / transformation</a></li>
 <li class="chapter" data-level="3.3" data-path="data.html"><a href="data.html#missing-value-analysis"><i class="fa fa-check"></i><b>3.3</b> Missing value analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>4</b> Results</a></li>
+<li class="chapter" data-level="4" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>4</b> Results</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="results.html"><a href="results.html#plots-notes-part-1-reading-math-test-scores"><i class="fa fa-check"></i><b>4.1</b> Plots + notes: Part 1 (Reading &amp; Math test scores)</a></li>
+<li class="chapter" data-level="4.2" data-path="results.html"><a href="results.html#plots-notes-part-2-nyc-student-demographics-indicators-of-success"><i class="fa fa-check"></i><b>4.2</b> Plots + Notes: Part 2 (NYC Student Demographics &amp; Indicators of success)</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>5</b> Interactive component</a></li>
 <li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Conclusion</a></li>
 <li class="divider"></li>
@@ -113,9 +117,819 @@
 </div>
 <div id="cleaning-transformation" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> Cleaning / transformation<a href="data.html#cleaning-transformation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><p>Reading in the Data</p></li>
+<li><p>Data Transformation</p></li>
+</ol>
+<p>Prepping the individual datasets to be joined, starting with getting rid of unnecessary years</p>
+<p>Converting years of demographics spreadsheets to single year format instead of school year</p>
+<p>Renaming the “District” column in the demographics dataset so it matches with the ELA/Math ones by district</p>
+<p>Converting “Year” columns of both demographics datasets &amp; “District” column of the demographic district dataset to numeric so they match the Math/ELA datasets</p>
+<p>Selecting the rows where data for “All Grades” is used in the Math/ELA spreadsheets</p>
+<p>Renaming all of the columns in the Math/ELA spreadsheets so we know which scores correspond to which test after everything is joined. The “_m” suffix corresponds to a Math score, and the “_e” suffix corresponds to an ELA score</p>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Joining datasets (one for school, one for district)</p></li>
+<li><p>Adding a new column in each dataframe that shows the percentage of students in a given district/school who sat for testing in a given year</p></li>
+<li><p>Getting rid of unnecessary columns in each of the combined dataframes</p></li>
+<li><p>Getting rid of the “Above 95%” entries in each dataframe- replacing it with 0.95 for the sake of analysis. Then converting numeric columns to numeric again</p></li>
+<li><p>Imputing all missing values with the mean of the column; too many rows/columns to create a heatmap so we will just impute them with the mean value for each category and analyze the other missing values later</p></li>
+</ol>
+<pre><code>##            Mean Scale Score_e            Mean Scale Score_m 
+##                             1                             1 
+##                           DBN                          Year 
+##                             0                             0 
+##              Total Enrollment                       % Asian 
+##                             0                             0 
+##                       % Black                    % Hispanic 
+##                             0                             0 
+##                % Multi-Racial             % Native American 
+##                             0                             0 
+##                       % White % Missing Race/Ethnicity Data 
+##                             0                             0 
+##  % Students with Disabilities   % English Language Learners 
+##                             0                             0 
+##                     % Poverty           Economic Need Index 
+##                             0                             0 
+##                    % tested_e                    % tested_m 
+##                             0                             0</code></pre>
+<pre><code>##                      District                          Year 
+##                             0                             0 
+##            Mean Scale Score_e            Mean Scale Score_m 
+##                             0                             0 
+##              Total Enrollment                       % Asian 
+##                             0                             0 
+##                       % Black                    % Hispanic 
+##                             0                             0 
+##                % Multi-Racial             % Native American 
+##                             0                             0 
+##                       % White % Missing Race/Ethnicity Data 
+##                             0                             0 
+##  % Students with Disabilities   % English Language Learners 
+##                             0                             0 
+##                     % Poverty           Economic Need Index 
+##                             0                             0 
+##                    % tested_e                    % tested_m 
+##                             0                             0</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li><p>Creating a % POC column (that sums all of the other races) for racial analysis of data</p></li>
+<li><p>Renaming specific columns for visibility in plots</p></li>
+<li><p>Writing two new csv’s so we don’t have to touch any of the old dataframes/csv’s anymore</p></li>
+</ol>
 </div>
 <div id="missing-value-analysis" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Missing value analysis<a href="data.html#missing-value-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Importing data.</p>
+<p>Let’s look at the structure of our data.</p>
+<pre><code>## &#39;data.frame&#39;:    3328 obs. of  19 variables:
+##  $ DBN                           : chr  &quot;01M015&quot; &quot;01M015&quot; &quot;01M015&quot; &quot;01M019&quot; ...
+##  $ Year                          : int  2018 2019 2022 2018 2019 2022 2018 2019 2022 2018 ...
+##  $ Mean.Scale.Score_e            : num  610 606 596 604 604 ...
+##  $ Mean.Scale.Score_m            : num  607 606 588 603 600 ...
+##  $ Total.Enrollment              : int  190 174 179 257 249 176 497 481 351 333 ...
+##  $ X..Asian                      : num  0.1053 0.1379 0.1173 0.0895 0.0562 ...
+##  $ X..Black                      : num  0.274 0.276 0.279 0.191 0.209 ...
+##  $ X..Hispanic                   : num  0.579 0.546 0.52 0.646 0.627 ...
+##  $ X..Multi.Racial               : num  0.00526 0 0.01676 0.01167 0.03213 ...
+##  $ X..Native.American            : num  0.00526 0.00575 0 0 0.00402 ...
+##  $ X..White                      : num  0.0316 0.0345 0.067 0.0623 0.0723 ...
+##  $ X..Missing.Race.Ethnicity.Data: num  0 0 0 0 0 ...
+##  $ X..SWD                        : num  0.258 0.224 0.212 0.35 0.41 ...
+##  $ X..ELL                        : num  0.0421 0.046 0.0615 0.0311 0.0321 ...
+##  $ X..Poverty                    : num  0.847 0.845 0.838 0.77 0.735 ...
+##  $ ENI                           : num  0.89 0.888 0.879 0.679 0.687 ...
+##  $ X..tested_e                   : num  0.353 0.402 0.413 0.358 0.329 ...
+##  $ X..tested_m                   : num  0.353 0.402 0.419 0.346 0.321 ...
+##  $ X..POC                        : num  0.968 0.966 0.933 0.938 0.928 ...</code></pre>
+<pre><code>## &#39;data.frame&#39;:    96 obs. of  19 variables:
+##  $ District                      : int  1 1 1 2 2 2 3 3 3 4 ...
+##  $ Year                          : int  2018 2019 2022 2018 2019 2022 2018 2019 2022 2018 ...
+##  $ Mean.Scale.Score_e            : num  606 605 605 614 613 ...
+##  $ Mean.Scale.Score_m            : num  600 604 601 613 614 ...
+##  $ Total.Enrollment              : int  11632 11376 10327 63497 62973 57900 22667 22577 19766 13230 ...
+##  $ X..Asian                      : num  0.216 0.215 0.204 0.224 0.222 ...
+##  $ X..Black                      : num  0.155 0.155 0.152 0.148 0.141 ...
+##  $ X..Hispanic                   : num  0.42 0.413 0.415 0.325 0.323 ...
+##  $ X..Multi.Racial               : num  0.0263 0.0296 0.0404 0.0299 0.0338 ...
+##  $ X..Native.American            : num  0.0061 0.00527 0.00513 0.00529 0.00561 ...
+##  $ X..White                      : num  0.174 0.18 0.18 0.258 0.265 ...
+##  $ X..Missing.Race.Ethnicity.Data: num  0.00249 0.00334 0.00281 0.01066 0.0101 ...
+##  $ X..SWD                        : num  0.217 0.228 0.228 0.171 0.176 ...
+##  $ X..ELL                        : num  0.0873 0.0849 0.0788 0.0849 0.0802 ...
+##  $ X..Poverty                    : num  0.66 0.643 0.626 0.551 0.532 ...
+##  $ ENI                           : num  0.67 0.661 0.653 0.543 0.529 ...
+##  $ X..tested_e                   : num  0.36 0.361 0.318 0.242 0.242 ...
+##  $ X..tested_m                   : num  0.368 0.342 0.289 0.232 0.229 ...
+##  $ X..POC                        : num  0.826 0.82 0.82 0.742 0.735 ...</code></pre>
+<table>
+<caption><span id="tab:unnamed-chunk-23">Table 3.1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">new_school_data</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">3328</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">19</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">18</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<colgroup>
+<col width="19%" />
+<col width="13%" />
+<col width="19%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="12%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DBN</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">1122</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<caption><span id="tab:unnamed-chunk-23">Table 3.1: </span>Data summary</caption>
+<colgroup>
+<col width="26%" />
+<col width="8%" />
+<col width="12%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Year</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">2019.68</td>
+<td align="right">1.70</td>
+<td align="right">2018.00</td>
+<td align="right">2018.00</td>
+<td align="right">2019.00</td>
+<td align="right">2022.00</td>
+<td align="right">2022.00</td>
+<td align="left">▇▇▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">Mean.Scale.Score_e</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">600.01</td>
+<td align="right">9.57</td>
+<td align="right">559.30</td>
+<td align="right">592.90</td>
+<td align="right">598.58</td>
+<td align="right">606.51</td>
+<td align="right">634.06</td>
+<td align="left">▁▂▇▃▁</td>
+</tr>
+<tr class="odd">
+<td align="left">Mean.Scale.Score_m</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">597.39</td>
+<td align="right">10.88</td>
+<td align="right">571.50</td>
+<td align="right">589.01</td>
+<td align="right">595.76</td>
+<td align="right">604.92</td>
+<td align="right">635.59</td>
+<td align="left">▂▇▆▂▁</td>
+</tr>
+<tr class="even">
+<td align="left">Total.Enrollment</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">575.69</td>
+<td align="right">330.60</td>
+<td align="right">41.00</td>
+<td align="right">336.00</td>
+<td align="right">512.00</td>
+<td align="right">718.00</td>
+<td align="right">2251.00</td>
+<td align="left">▇▇▂▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">X..Asian</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0.19</td>
+<td align="right">0.00</td>
+<td align="right">0.02</td>
+<td align="right">0.05</td>
+<td align="right">0.19</td>
+<td align="right">0.94</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">X..Black</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.26</td>
+<td align="right">0.26</td>
+<td align="right">0.00</td>
+<td align="right">0.04</td>
+<td align="right">0.18</td>
+<td align="right">0.43</td>
+<td align="right">0.96</td>
+<td align="left">▇▃▂▂▁</td>
+</tr>
+<tr class="odd">
+<td align="left">X..Hispanic</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.42</td>
+<td align="right">0.26</td>
+<td align="right">0.01</td>
+<td align="right">0.19</td>
+<td align="right">0.37</td>
+<td align="right">0.65</td>
+<td align="right">1.00</td>
+<td align="left">▇▇▅▆▃</td>
+</tr>
+<tr class="even">
+<td align="left">X..Multi.Racial</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.01</td>
+<td align="right">0.02</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.01</td>
+<td align="right">0.02</td>
+<td align="right">0.17</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">X..Native.American</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.01</td>
+<td align="right">0.02</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.01</td>
+<td align="right">0.01</td>
+<td align="right">0.42</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">X..White</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">0.20</td>
+<td align="right">0.00</td>
+<td align="right">0.02</td>
+<td align="right">0.04</td>
+<td align="right">0.21</td>
+<td align="right">0.96</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">X..Missing.Race.Ethnicity.Data</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.07</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">X..SWD</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.22</td>
+<td align="right">0.07</td>
+<td align="right">0.01</td>
+<td align="right">0.17</td>
+<td align="right">0.21</td>
+<td align="right">0.26</td>
+<td align="right">0.54</td>
+<td align="left">▁▇▆▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">X..ELL</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">0.12</td>
+<td align="right">0.00</td>
+<td align="right">0.05</td>
+<td align="right">0.11</td>
+<td align="right">0.21</td>
+<td align="right">1.00</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">X..Poverty</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.75</td>
+<td align="right">0.21</td>
+<td align="right">0.06</td>
+<td align="right">0.68</td>
+<td align="right">0.83</td>
+<td align="right">0.92</td>
+<td align="right">0.95</td>
+<td align="left">▁▁▁▂▇</td>
+</tr>
+<tr class="odd">
+<td align="left">ENI</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.72</td>
+<td align="right">0.22</td>
+<td align="right">0.06</td>
+<td align="right">0.61</td>
+<td align="right">0.80</td>
+<td align="right">0.90</td>
+<td align="right">0.95</td>
+<td align="left">▁▁▂▃▇</td>
+</tr>
+<tr class="even">
+<td align="left">X..tested_e</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.54</td>
+<td align="right">0.22</td>
+<td align="right">0.01</td>
+<td align="right">0.40</td>
+<td align="right">0.46</td>
+<td align="right">0.66</td>
+<td align="right">0.99</td>
+<td align="left">▁▅▇▂▃</td>
+</tr>
+<tr class="odd">
+<td align="left">X..tested_m</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.53</td>
+<td align="right">0.21</td>
+<td align="right">0.01</td>
+<td align="right">0.41</td>
+<td align="right">0.47</td>
+<td align="right">0.62</td>
+<td align="right">1.34</td>
+<td align="left">▁▇▂▂▁</td>
+</tr>
+<tr class="even">
+<td align="left">X..POC</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.85</td>
+<td align="right">0.20</td>
+<td align="right">0.04</td>
+<td align="right">0.79</td>
+<td align="right">0.96</td>
+<td align="right">0.98</td>
+<td align="right">1.00</td>
+<td align="left">▁▁▁▁▇</td>
+</tr>
+</tbody>
+</table>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">new_district_data</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">96</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">19</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">19</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table style="width:100%;">
+<colgroup>
+<col width="25%" />
+<col width="8%" />
+<col width="11%" />
+<col width="7%" />
+<col width="7%" />
+<col width="6%" />
+<col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">District</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">16.50</td>
+<td align="right">9.28</td>
+<td align="right">1.00</td>
+<td align="right">8.75</td>
+<td align="right">16.50</td>
+<td align="right">24.25</td>
+<td align="right">32.00</td>
+<td align="left">▇▇▇▇▇</td>
+</tr>
+<tr class="even">
+<td align="left">Year</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">2019.67</td>
+<td align="right">1.71</td>
+<td align="right">2018.00</td>
+<td align="right">2018.00</td>
+<td align="right">2019.00</td>
+<td align="right">2022.00</td>
+<td align="right">2022.00</td>
+<td align="left">▇▇▁▁▇</td>
+</tr>
+<tr class="odd">
+<td align="left">Mean.Scale.Score_e</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">599.95</td>
+<td align="right">6.30</td>
+<td align="right">589.45</td>
+<td align="right">594.39</td>
+<td align="right">599.51</td>
+<td align="right">605.10</td>
+<td align="right">613.96</td>
+<td align="left">▇▇▇▆▃</td>
+</tr>
+<tr class="even">
+<td align="left">Mean.Scale.Score_m</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">597.23</td>
+<td align="right">7.56</td>
+<td align="right">584.29</td>
+<td align="right">591.64</td>
+<td align="right">595.34</td>
+<td align="right">602.03</td>
+<td align="right">614.62</td>
+<td align="left">▅▇▆▃▂</td>
+</tr>
+<tr class="odd">
+<td align="left">Total.Enrollment</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">29753.80</td>
+<td align="right">15879.92</td>
+<td align="right">5970.00</td>
+<td align="right">18405.25</td>
+<td align="right">27278.50</td>
+<td align="right">39605.25</td>
+<td align="right">63497.00</td>
+<td align="left">▆▇▆▃▃</td>
+</tr>
+<tr class="even">
+<td align="left">X..Asian</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">0.14</td>
+<td align="right">0.01</td>
+<td align="right">0.03</td>
+<td align="right">0.09</td>
+<td align="right">0.22</td>
+<td align="right">0.54</td>
+<td align="left">▇▃▂▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">X..Black</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.28</td>
+<td align="right">0.22</td>
+<td align="right">0.02</td>
+<td align="right">0.14</td>
+<td align="right">0.21</td>
+<td align="right">0.38</td>
+<td align="right">0.85</td>
+<td align="left">▇▆▂▁▂</td>
+</tr>
+<tr class="even">
+<td align="left">X..Hispanic</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.41</td>
+<td align="right">0.21</td>
+<td align="right">0.07</td>
+<td align="right">0.25</td>
+<td align="right">0.38</td>
+<td align="right">0.61</td>
+<td align="right">0.85</td>
+<td align="left">▇▇▆▆▃</td>
+</tr>
+<tr class="odd">
+<td align="left">X..Multi.Racial</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.01</td>
+<td align="right">0.01</td>
+<td align="right">0.00</td>
+<td align="right">0.01</td>
+<td align="right">0.01</td>
+<td align="right">0.01</td>
+<td align="right">0.04</td>
+<td align="left">▇▃▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">X..Native.American</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.01</td>
+<td align="right">0.01</td>
+<td align="right">0.00</td>
+<td align="right">0.01</td>
+<td align="right">0.01</td>
+<td align="right">0.01</td>
+<td align="right">0.05</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">X..White</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.13</td>
+<td align="right">0.12</td>
+<td align="right">0.01</td>
+<td align="right">0.04</td>
+<td align="right">0.10</td>
+<td align="right">0.18</td>
+<td align="right">0.47</td>
+<td align="left">▇▅▁▂▁</td>
+</tr>
+<tr class="even">
+<td align="left">X..Missing.Race.Ethnicity.Data</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.01</td>
+<td align="right">0.02</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">X..SWD</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.20</td>
+<td align="right">0.03</td>
+<td align="right">0.14</td>
+<td align="right">0.17</td>
+<td align="right">0.20</td>
+<td align="right">0.23</td>
+<td align="right">0.26</td>
+<td align="left">▆▇▇▆▆</td>
+</tr>
+<tr class="even">
+<td align="left">X..ELL</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.13</td>
+<td align="right">0.06</td>
+<td align="right">0.04</td>
+<td align="right">0.08</td>
+<td align="right">0.11</td>
+<td align="right">0.18</td>
+<td align="right">0.28</td>
+<td align="left">▇▇▃▅▂</td>
+</tr>
+<tr class="odd">
+<td align="left">X..Poverty</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.75</td>
+<td align="right">0.12</td>
+<td align="right">0.48</td>
+<td align="right">0.67</td>
+<td align="right">0.76</td>
+<td align="right">0.83</td>
+<td align="right">0.93</td>
+<td align="left">▂▃▆▇▆</td>
+</tr>
+<tr class="even">
+<td align="left">ENI</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.73</td>
+<td align="right">0.13</td>
+<td align="right">0.46</td>
+<td align="right">0.63</td>
+<td align="right">0.73</td>
+<td align="right">0.83</td>
+<td align="right">0.93</td>
+<td align="left">▅▆▇▇▇</td>
+</tr>
+<tr class="odd">
+<td align="left">X..tested_e</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.39</td>
+<td align="right">0.06</td>
+<td align="right">0.18</td>
+<td align="right">0.35</td>
+<td align="right">0.40</td>
+<td align="right">0.43</td>
+<td align="right">0.50</td>
+<td align="left">▁▁▅▇▅</td>
+</tr>
+<tr class="even">
+<td align="left">X..tested_m</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.38</td>
+<td align="right">0.07</td>
+<td align="right">0.17</td>
+<td align="right">0.34</td>
+<td align="right">0.39</td>
+<td align="right">0.43</td>
+<td align="right">0.48</td>
+<td align="left">▁▁▅▇▆</td>
+</tr>
+<tr class="odd">
+<td align="left">X..POC</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.87</td>
+<td align="right">0.12</td>
+<td align="right">0.53</td>
+<td align="right">0.82</td>
+<td align="right">0.90</td>
+<td align="right">0.96</td>
+<td align="right">0.99</td>
+<td align="left">▁▂▁▅▇</td>
+</tr>
+</tbody>
+</table>
+<p>At first glance, the data seems to be clean. Using skim(), it returned that there were 0 missing values in the dataset, however the missing values are accounted for in the school and district datasets via the “% Missing Race/Ethnicity” columns. Our approach is to look for missing values by filtering the “% Missing Race/Ethnicity” column and looking at the percentage of missing data.</p>
+<p>First we will find the minimum and maximum values for missing data in this column to determine the range of missing race/ethnicity data. Using the min() and max() functions, we discovered that the percent of missing data lies between 0% and ~ 6.7% for the school dataset and 0.09% and 2.4% for the district dataset. It’s good to note that the district data doesn’t have a large number of missing values because districts are comprised of schools and data has to be reported to the district each school belongs in. If a large amount of district data was missing, we’d have to question where the school data went.</p>
+<pre><code>## [1] 0</code></pre>
+<pre><code>## [1] 0.06687898</code></pre>
+<pre><code>## [1] 0.0009401308</code></pre>
+<pre><code>## [1] 0.02372761</code></pre>
+<p>Before using data visualization methods, we thought it’d be important to look at the missing data in intervals of 0.2 for the school data.</p>
+<p>We found that:
+- 2421 rows in the school dataset have no missing values.
+- 864 rows in the school dataset have between 0% and 2% missing data.
+- 36 rows in the school dataset have between 2% and 4% missing data.
+- 4 rows in the school dataset have between 4% and 6% missing data.
+- 3 rows in the school dataset have more than 6% missing data.</p>
+<pre><code>##      n
+## 1 2421</code></pre>
+<pre><code>##     n
+## 1 864</code></pre>
+<pre><code>##    n
+## 1 36</code></pre>
+<pre><code>##   n
+## 1 4</code></pre>
+<pre><code>##   n
+## 1 3</code></pre>
+<p>For the district data, we thought it’d be nice to look at it by intervals of 0.005.</p>
+<p>We found that:
+- 0 rows in the district dataset have no missing values.
+- 61 rows in the district dataset have between 0% and 0.5% missing data.
+- 26 rows in the district dataset have between 0.5% and 1% missing data.
+- 8 rows in the district dataset have between 1% and 1.5% missing data.
+- 0 rows in the district dataset have between 1.5% and 2% missing data.
+- 1 row in the district has over 2% missing data.</p>
+<pre><code>##   n
+## 1 0</code></pre>
+<pre><code>##    n
+## 1 61</code></pre>
+<pre><code>##    n
+## 1 26</code></pre>
+<pre><code>##   n
+## 1 8</code></pre>
+<pre><code>##   n
+## 1 0</code></pre>
+<pre><code>##   n
+## 1 1</code></pre>
+<p>For our exploratory data analysis of the missing data, we decided to use a histogram. Histograms are good because they’re able to show frequency distributions. We found that the data was right-skewed. We can conclude from the visualization that majority of the schools are not missing data as it relates to racial and ethnic demographic data. This was also shown in our preliminary process, where we noted 2421 rows were not missing data, which is roughly 73% of our dataset.The remaining 27% of the data was missing about 6.7% of data, which is not too bad.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-27-1.png" width="672" />
+Ridgeline plot for district by the amount of students that tested.</p>
+<p>The ridgeline plots look at the percentage of students that tested in Math and ELA by district from the 2017-2018, 2018-2019, and 2021-2022 academic years. Originally, we wanted to facet the data by year and see if there were any differences across districts, however there is only one entry per year for each district, so that would not be helpful (or produce a ridgeline plot). We found that the distributions were very similar across both subjects. In neither Math or ELA was there more than 50% students tested. For districts 7 and 8, in both ELA and Math, there is some slight overlap. This means that some of the entries for those two districts may be the same or close in value. In the math scores, we can also see a very small overlap with districts 24 and 25. Both overlaps are miniscule.
+<img src="finalproj_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
 
 </div>
 </div>
