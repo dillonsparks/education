@@ -2,14 +2,15 @@
 
 
 
-
 ## Sources
 
-
+The NYC Department of Education was responsible for collecting and publishing this data. The school-level test scores were collected after they were administered and graded, and then this data was used to calculate the district-level test scores. The demographic information was collected using both the student’s information once they entered the NYC public school system, and census data. We chose to use standardized testing data from grades 3-8 over Regent’s scores (the high school equivalent of these elementary and middle school tests) because there are more middle and elementary schools in the city, and thus, more data to work with. The data was pulled from six different spreadsheets, with categorical and numerical data, with a range of 16 to 44 variables. The two largest spreadsheets had 37,000+ observations, while the smallest had only 175. The datasets did not have many issues, as there were only two missing observations in total; both were test scores for a specific school in a specific year (one Math and one ELA). However, there was a great deal of data transformation, merging, and cleaning that needed to be done in order to investigate some of the questions brought forth earlier. 
 
 ## Cleaning / transformation
 
-```{r, include=FALSE}
+Here are the various steps of the data cleaning and transformation processes, broken down into smaller tasks. 
+
+```{r echo=FALSE}
 library(dplyr)
 library(GGally)
 library(tidyverse)
@@ -22,7 +23,7 @@ library(ggpubr)
 
 1) Reading in the Data 
 
-```{r}
+```{r, echo=TRUE}
 demographic_notes <- read_excel("../demographic_snapshot.xlsx", sheet = "NOTES", na = "MISSING")
 demographics_school <- read_excel("../demographic_snapshot.xlsx", sheet = "School", na = "MISSING")
 demographics_district <- read_excel("../demographic_snapshot.xlsx", sheet = "District", na = "MISSING")
@@ -37,7 +38,7 @@ ela_district <- read_excel("../district-ela-results-2013-2022-(public).xlsx", sh
 
 Prepping the individual datasets to be joined, starting with getting rid of unnecessary years
 
-```{r}
+```{r, echo=TRUE}
 demographics_district_filtered <- filter(demographics_district, Year == '2017-18' | Year == '2018-19' | Year == '2021-22')
 demographics_school_filtered <- filter(demographics_school, Year == '2017-18' | Year == '2018-19' | Year == '2021-22')
 math_school_filtered <- filter(math_school, Year == '2018' | Year == '2019' | Year == '2022')
@@ -49,7 +50,7 @@ ela_district_filtered <- filter(ela_district, Year == '2018' | Year == '2019' | 
 
 Converting years of demographics spreadsheets to single year format instead of school year
 
-```{r}
+```{r, echo=TRUE}
 
 demographics_district_filtered[demographics_district_filtered == '2017-18'] <- '2018'
 demographics_district_filtered[demographics_district_filtered == '2018-19'] <- '2019'
@@ -63,14 +64,14 @@ demographics_school_filtered[demographics_school_filtered == '2021-22'] <- '2022
 
 Renaming the "District" column in the demographics dataset so it matches with the ELA/Math ones by district 
 
-```{r}
+```{r, echo=TRUE}
 demographics_district_filtered <- rename(demographics_district_filtered, "District" = "Administrative District")
 ```
 
 
 Converting "Year" columns of both demographics datasets & "District" column of the demographic district dataset to numeric so they match the Math/ELA datasets
 
-```{r}
+```{r, echo=TRUE}
 demographics_school_filtered$Year <- as.numeric(demographics_school_filtered$Year)
 demographics_district_filtered$District <- as.numeric(demographics_district_filtered$District)
 demographics_district_filtered$Year <- as.numeric(demographics_district_filtered$Year)
@@ -78,7 +79,7 @@ demographics_district_filtered$Year <- as.numeric(demographics_district_filtered
 
 Selecting the rows where data for "All Grades" is used in the Math/ELA spreadsheets
 
-```{r}
+```{r, echo=TRUE}
 math_district_filtered <- filter(math_district_filtered, Grade == "All Grades") 
 ela_district_filtered <- filter(ela_district_filtered, Grade == "All Grades")
 math_school_filtered <- filter(math_school_filtered, Grade == "All Grades")
@@ -89,7 +90,7 @@ ela_school_filtered <- filter(ela_school_filtered, Grade == "All Grades")
 
 Renaming all of the columns in the Math/ELA spreadsheets so we know which scores correspond to which test after everything is joined. The "_m" suffix corresponds to a Math score, and the "_e" suffix corresponds to an ELA score
 
-```{r}
+```{r, echo=TRUE}
 for (i in 7:ncol(math_school_filtered)) {
   oldname <- colnames(math_school_filtered[i])
   newname <- paste(oldname, "m", sep = "_")
@@ -118,16 +119,15 @@ for (i in 5:ncol(ela_district_filtered)) {
 
 3) Joining datasets (one for school, one for district)
 
-```{r}
+```{r echo=TRUE}
 df_district <- ela_district_filtered%>%inner_join(math_district_filtered, by = c('District', 'Year'))%>%inner_join(demographics_district_filtered, by = c("District", "Year"))
 df_school <- ela_school_filtered%>%inner_join(math_school_filtered, by = c('DBN', 'Year'))%>%inner_join(demographics_school_filtered, by = c("DBN", "Year"))
 
 ```
 
-
 4) Adding a new column in each dataframe that shows the percentage of students in a given district/school who sat for testing in a given year 
 
-```{r}
+```{r echo=TRUE}
 df_school$`% tested_e` <- df_school$`Number Tested_e`/df_school$`Total Enrollment`
 df_school$`% tested_m` <- df_school$`Number Tested_m`/df_school$`Total Enrollment`
 
@@ -139,7 +139,7 @@ df_district$`% tested_m` <- df_district$`Number Tested_m`/df_district$`Total Enr
 
 5) Getting rid of unnecessary columns in each of the combined dataframes
 
-```{r}
+```{r echo=TRUE}
 df_school <- df_school %>% select(-"% Female", -"% Male", -contains("Number"),-"# Missing Race/Ethnicity Data",-"# Multi-Racial",-"# Black", -"# Asian", -"# Female", -"# Male", -"# White",-"# Hispanic",-"# Native American", -"# English Language Learners",-contains("Level"),-contains("..."), -contains("Category"), -contains("School Name"),-"# Poverty",-contains("Grade"), -"# Students with Disabilities")
 df_district <- df_district %>% select(-"% Female", -"% Male", -contains("Number"),-"# Missing Race/Ethnicity Data",-"# Multi-Racial",-"# Black", -"# Asian", -"# Female", -"# Male", -"# White",-"# Hispanic",-"# Native American", -"# English Language Learners", -contains("Level"), -contains("Grade"), -contains("Category"), -"# Poverty", -"# Students with Disabilities")
 ```
@@ -147,7 +147,7 @@ df_district <- df_district %>% select(-"% Female", -"% Male", -contains("Number"
 
 6)  Getting rid of the "Above 95%" entries in each dataframe- replacing it with 0.95 for the sake of analysis. Then converting numeric columns to numeric again
 
-```{r}
+```{r echo=TRUE}
 df_school[df_school == "Above 95%"] <- "0.95"
 df_district[df_district == "Above 95%"] <- "0..95"
 df_school[,2:ncol(df_school)] <- df_school[,2:ncol(df_school)]%>%lapply(as.numeric) 
@@ -155,16 +155,9 @@ df_district[,2:ncol(df_district)] <- df_district[,2:ncol(df_district)]%>%lapply(
 ```
 
 
-7) Imputing all missing values with the mean of the column; too many rows/columns to create a heatmap so we will just impute them with the mean value for each category and analyze the other missing values later
+7) Imputing all missing values with the mean of the column; too many rows/columns to create a heatmap and only 2 missing values (one in the Math scores and one in the ELA scores) so we will just impute them with the mean value for each category and analyze the other missing values later
 
-```{r}
-colSums(is.na(df_school)) %>% sort(decreasing = TRUE)
-colSums(is.na(df_district)) %>% sort(decreasing = TRUE)
-```
-
-```{r}
-df_school$`% Poverty`[is.na(df_school$`% Poverty`)] <- mean(df_school$`% Poverty`,na.rm = TRUE)
-df_school$`Economic Need Index`[is.na(df_school$`Economic Need Index`)] <- mean(df_school$`Economic Need Index`,na.rm = TRUE)
+```{r echo=TRUE}
 df_school$`Mean Scale Score_e`[is.na(df_school$`Mean Scale Score_e`)] <- mean(df_school$`Mean Scale Score_e`,na.rm = TRUE)
 df_school$`Mean Scale Score_m`[is.na(df_school$`Mean Scale Score_m`)] <- mean(df_school$`Mean Scale Score_m`,na.rm = TRUE)
 ```
@@ -172,7 +165,7 @@ df_school$`Mean Scale Score_m`[is.na(df_school$`Mean Scale Score_m`)] <- mean(df
 
 7) Creating a % POC column (that sums all of the other races) for racial analysis of data 
 
-```{r}
+```{r echo=TRUE}
 df_school$`% POC` <- (1-df_school$`% White`)
 df_district$`% POC` <- (1-df_district$`% White`)
 ```
@@ -180,7 +173,7 @@ df_district$`% POC` <- (1-df_district$`% White`)
 
 8) Renaming specific columns for visibility in plots
 
-```{r}
+```{r echo=TRUE}
 df_school <- rename(df_school, "% SWD" = "% Students with Disabilities")
 df_school <- rename(df_school, "% ELL" = "% English Language Learners")
 df_district <- rename(df_district, "% SWD" = "% Students with Disabilities")
@@ -192,38 +185,45 @@ df_district <- rename(df_district, "ENI" = "Economic Need Index")
 
 9) Writing two new csv's so we don't have to touch any of the old dataframes/csv's anymore 
 
-```{r}
+```{r echo=TRUE}
 write_csv(df_school, "../School.csv")
 write_csv(df_district, "../District.csv")
 ```
 
+
 ## Missing value analysis
 
-Importing data.
-```{r}
+```{r, include=FALSE}
 new_school_data <- read.csv("../School.csv")
 
 new_district_data <- read.csv("../District.csv")
 ```
 
-Let's look at the structure of our data.
-```{r}
+
+After importing our two new datasets, we can see that there are no more NA's in either.
+```{r echo=TRUE}
+head(colSums(is.na(new_school_data))) %>% sort(decreasing = TRUE)
+head(colSums(is.na(new_district_data))) %>% sort(decreasing = TRUE)
+```
+
+
+```{r, include=FALSE}
 str(new_school_data)
 str(new_district_data)
 ```
 
 
-```{r}
+```{r include=FALSE}
 skim(new_school_data)
 skim(new_district_data)
 ```
 
-At first glance, the data seems to be clean. Using skim(), it returned that there were 0 missing values in the dataset, however the missing values are accounted for in the school and district datasets via the "% Missing Race/Ethnicity" columns. Our approach is to look for missing values by filtering the "% Missing Race/Ethnicity" column and looking at the percentage of missing data.
+At first glance using the skim() function, the data seems to be clean. As shown above, there were 0 missing values in the dataset, however the missing values are accounted for in the school and district datasets via the "% Missing Race/Ethnicity" and "% tested_e"/"% tested_m" columns. Our approach is to start by looking for missing values by filtering the "% Missing Race/Ethnicity" column and looking at the percentage of missing data.
 
-First we will find the minimum and maximum values for missing data in this column to determine the range of missing race/ethnicity data. Using the min() and max() functions, we discovered that the percent of missing data lies between 0% and ~ 6.7% for the school dataset and 0.09% and 2.4% for the district dataset. It's good to note that the district data doesn't have a large number of missing values because districts are comprised of schools and data has to be reported to the district each school belongs in. If a large amount of district data was missing, we'd have to question where the school data went.
+First we will find the minimum and maximum values for missing data in this column to determine the range of missing race/ethnicity data. Using the min() and max() functions, we discovered that the percent of missing data lies between 0% and ~ 6.7% for the school dataset and 0.09% and 2.4% for the district dataset. It's good to note that the district data doesn't have a large number of missing values because districts are comprised of schools and data has to be reported to the district each school belongs in. If a large amount of district data was missing, we'd have to question where a bunch of the individual school data went.
 
 
-```{r}
+```{r,include=FALSE}
 min(new_school_data$X..Missing.Race.Ethnicity.Data)
 max(new_school_data$X..Missing.Race.Ethnicity.Data)
 
@@ -232,14 +232,14 @@ max(new_district_data$X..Missing.Race.Ethnicity.Data)
 ```
 Before using data visualization methods, we thought it'd be important to look at the missing data in intervals of 0.2 for the school data.
 
-We found that:
-- 2421 rows in the school dataset have no missing values.
-- 864 rows in the school dataset have between 0% and 2% missing data.
-- 36 rows in the school dataset have between 2% and 4% missing data.
-- 4 rows in the school dataset have between 4% and 6% missing data.
-- 3 rows in the school dataset have more than 6% missing data.
+We found that:  
+* 2421 rows in the school dataset have no missing values.  
+* 864 rows in the school dataset have between 0% and 2% missing data.  
+* 36 rows in the school dataset have between 2% and 4% missing data.  
+* 4 rows in the school dataset have between 4% and 6% missing data.  
+* 3 rows in the school dataset have more than 6% missing data.  
 
-```{r}
+```{r, include=FALSE}
 new_school_data %>% select(X..Missing.Race.Ethnicity.Data) %>% filter(X..Missing.Race.Ethnicity.Data <= 0) %>% count()
 
 new_school_data %>% select(X..Missing.Race.Ethnicity.Data) %>% filter(X..Missing.Race.Ethnicity.Data > 0 & X..Missing.Race.Ethnicity.Data < 0.02) %>% count()
@@ -251,17 +251,17 @@ new_school_data %>% select(X..Missing.Race.Ethnicity.Data) %>% filter(X..Missing
 new_school_data %>% select(X..Missing.Race.Ethnicity.Data) %>% filter(X..Missing.Race.Ethnicity.Data >= 0.06) %>% count()
 ```
 
-For the district data, we thought it'd be nice to look at it by intervals of 0.005.
+For the district data, we thought it'd be nice to look at it by intervals of 0.005.  
 
-We found that:
-- 0 rows in the district dataset have no missing values.
-- 61 rows in the district dataset have between 0% and 0.5% missing data.
-- 26 rows in the district dataset have between 0.5% and 1% missing data.
-- 8 rows in the district dataset have between 1% and 1.5% missing data.
-- 0 rows in the district dataset have between 1.5% and 2% missing data.
-- 1 row in the district has over 2% missing data.
+We found that:  
+- 0 rows in the district dataset have no missing values.  
+- 61 rows in the district dataset have between 0% and 0.5% missing data.  
+- 26 rows in the district dataset have between 0.5% and 1% missing data.  
+- 8 rows in the district dataset have between 1% and 1.5% missing data.  
+- 0 rows in the district dataset have between 1.5% and 2% missing data.  
+- 1 row in the district has over 2% missing data.  
 
-```{r}
+```{r,include=FALSE}
 new_district_data %>% select(X..Missing.Race.Ethnicity.Data) %>% filter(X..Missing.Race.Ethnicity.Data <= 0) %>% count()
 
 new_district_data %>% select(X..Missing.Race.Ethnicity.Data) %>% filter(X..Missing.Race.Ethnicity.Data > 0 & X..Missing.Race.Ethnicity.Data < 0.005) %>% count()
@@ -276,15 +276,15 @@ new_district_data %>% select(X..Missing.Race.Ethnicity.Data) %>% filter(X..Missi
 ```
 
 
-For our exploratory data analysis of the missing data, we decided to use a histogram. Histograms are good because they're able to show frequency distributions. We found that the data was right-skewed. We can conclude from the visualization that majority of the schools are not missing data as it relates to racial and ethnic demographic data. This was also shown in our preliminary process, where we noted 2421 rows were not missing data, which is roughly 73% of our dataset.The remaining 27% of the data was missing about 6.7% of data, which is not too bad.
+For our exploratory data analysis of the missing testing data, we decided to use a histogram. Histograms are good because they're able to show frequency distributions. We found that the data was right-skewed. We can conclude from the visualization that majority of the schools are not missing data as it relates to racial and ethnic demographic data. This was also shown in our preliminary process, where we noted 2421 rows were not missing data, which is roughly 73% of our dataset.The remaining 27% of the data was missing about 6.7% of data, which is not too bad.
 
-```{r}
+```{r echo=FALSE}
 ggplot(data = new_school_data, aes(x = X..Missing.Race.Ethnicity.Data)) + geom_histogram(color = "black", binwidth = .001) + xlab("Missing Race/Ethnicity") + ylab("Frequency") + ggtitle("Frequency of Missing Data") + theme(plot.title = element_text(hjust = 0.5))
 ```
-Ridgeline plot for district by the amount of students that tested. 
+Ridgeline plot for district by the amount of students that tested.   
 
 The ridgeline plots look at the percentage of students that tested in Math and ELA by district from the  2017-2018, 2018-2019, and 2021-2022 academic years. Originally, we wanted to facet the data by year and see if there were any differences across districts, however there is only one entry per year for each district, so that would not be helpful (or produce a ridgeline plot). We found that the distributions were very similar across both subjects. In neither Math or ELA was there more than 50% students tested. For districts 7 and 8, in both ELA and Math, there is some slight overlap. This means that some of the entries for those two districts may be the same or close in value. In the math scores, we can also see a very small overlap with districts 24 and 25. Both overlaps are miniscule.
-```{r}
+```{r echo=FALSE}
 new_district_data$District <- as.factor(new_district_data$District)
 
 ela = ggplot(new_district_data, aes(x = X..tested_e, y = District)) + geom_density_ridges(fill = "blue",alpha = .5, scale = 1.2) + xlab("% Tested for ELA") + ggtitle("% Tested for ELA by District") 
