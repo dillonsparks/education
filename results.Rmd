@@ -95,7 +95,8 @@ cdp_math <- ggplot(district, aes(x = district$`Mean Scale Score_m`, y = fct_reor
        labs(color = "Year")
 cdp_math 
 ```
-  The first thing that we noticed about this plot was the trend in scores over time; scores increased from 2018 to 2019, then decreased significantly for nearly every district in 2022, so much so that they are far below the 2018 scores! This drop off in 2022 can largely be explained due to Covid-19, but we do not have any proposed evidence for the nearly uniform increase in scores from 2018 to 2019. One notable exception to these observations is District 1, who dropped from 2019 to 2022, but still performed better in 2022 than 2018. There is also a lot of variation in scores between districts, which supports the claim that all public schools do not have access the same resources and quality of education. 
+
+The first thing that we noticed about this plot was the trend in scores over time; scores increased from 2018 to 2019, then decreased significantly for nearly every district in 2022, so much so that they are far below the 2018 scores! This drop off in 2022 can largely be explained due to Covid-19, but we do not have any proposed evidence for the nearly uniform increase in scores from 2018 to 2019. One notable exception to these observations is District 1, who dropped from 2019 to 2022, but still performed better in 2022 than 2018. There is also a lot of variation in scores between districts, which supports the claim that all public schools do not have access the same resources and quality of education. 
 
 Next, we did the same for ELA scores:
 
@@ -110,7 +111,8 @@ cdp_ela <- ggplot(district, aes(x = district$`Mean Scale Score_e`, y = fct_reord
       labs(color = "Year")
 cdp_ela
 ```
-  This plot is extremely interesting because many Districts performed better on ELA in 2022 than in years prior! Furthermore, 2019 is the year where students performed the lowest for the majority of the districts, which is the exact opposite of what the Math dot plot told us. It is difficult to conclude why we see these different trends when we break down the data by subject then year. One suggestion is that students' reading and critical thinking skills were challenged more than ever since the beginning of quarantine, when many people relied on social media posts articles to get the majority of their information regarding the ongoing global crisis. Their relationship with math and any quantitative skills may not have been integrated into their daily lives in the same way. Furthermore, year to year variance in test difficulty may explain some of the variance in scores.
+
+This plot is extremely interesting because many Districts performed better on ELA in 2022 than in years prior! Furthermore, 2019 is the year where students performed the lowest for the majority of the districts, which is the exact opposite of what the Math dot plot told us. It is difficult to conclude why we see these different trends when we break down the data by subject then year. One suggestion is that students' reading and critical thinking skills were challenged more than ever since the beginning of quarantine, when many people relied on social media posts articles to get the majority of their information regarding the ongoing global crisis. Their relationship with math and any quantitative skills may not have been integrated into their daily lives in the same way. Furthermore, year to year variance in test difficulty may explain some of the variance in scores.
 (Note; the 2018/2019 ELA scores for District 4 are nearly identical, so it looks like we're missing a year of data)  
 
 
@@ -131,7 +133,7 @@ There seems to be a slight positive association between ENI and %SWD each year, 
 
 Next, we dove into the racial demographics of each district. We created a new "% POC" column in the data in order to plot race by district (which included the missing racial data group). We acknowledge the limitations of viewing race in the data as binary, which it is certainly not in real life. If one wishes to repeat this process, we would suggest potentially binning the data or creating a new "majority" categorical column that shows the leading racial demographic by percentage in a particular school/district. 
 
-```{r}
+```{r, warning=FALSE}
 district$Y <- as.character(district$Year)
 
 ggplot(district, aes(x= district$`% POC`)) +
@@ -176,4 +178,5 @@ ggparcoord(district,
            #groupColumn = 20,
            splineFactor=10)
 ```
+
 We switched around the order of the factors for this second graph in order to see if we noticed anything new. Now, we can see a slight negative association between the percentage of students of color and total enrollment, and a strong negative association between both math scores and the percentage of students living in poverty and the percentage of English language learners and math scores.  
