@@ -149,7 +149,7 @@ df_district <- df_district %>% select(-"% Female", -"% Male", -contains("Number"
 
 ```{r echo=TRUE}
 df_school[df_school == "Above 95%"] <- "0.95"
-df_district[df_district == "Above 95%"] <- "0..95"
+df_district[df_district == "Above 95%"] <- "0.95"
 df_school[,2:ncol(df_school)] <- df_school[,2:ncol(df_school)]%>%lapply(as.numeric) 
 df_district[,2:ncol(df_district)] <- df_district[,2:ncol(df_district)]%>%lapply(as.numeric) 
 ```
@@ -284,6 +284,7 @@ ggplot(data = new_school_data, aes(x = X..Missing.Race.Ethnicity.Data)) + geom_h
 Ridgeline plot for district by the amount of students that tested.   
 
 The ridgeline plots look at the percentage of students that tested in Math and ELA by district from the  2017-2018, 2018-2019, and 2021-2022 academic years. Originally, we wanted to facet the data by year and see if there were any differences across districts, however there is only one entry per year for each district, so that would not be helpful (or produce a ridgeline plot). We found that the distributions were very similar across both subjects. In neither Math or ELA was there more than 50% students tested. For districts 7 and 8, in both ELA and Math, there is some slight overlap. This means that some of the entries for those two districts may be the same or close in value. In the math scores, we can also see a very small overlap with districts 24 and 25. Both overlaps are miniscule.
+
 ```{r echo=FALSE}
 new_district_data$District <- as.factor(new_district_data$District)
 
