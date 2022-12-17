@@ -179,12 +179,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="plots-and-notes-part-1-reading-vs.-math-test-scores-the-covid-19-pandemic" class="section level2 hasAnchor" number="4.1">
 <h2><span class="header-section-number">4.1</span> Plots and notes: Part 1 (Reading vs. Math test scores &amp; the Covid-19 pandemic)<a href="results.html#plots-and-notes-part-1-reading-vs.-math-test-scores-the-covid-19-pandemic" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In investigating the relationship between Reading and Math scores, we started very broad by asking ourselves if there is a correlation between success on Math &amp; success on ELA. We chose to break this down at the school level, because there is a lot more data for us to work with.</p>
-<p>PLOT 1: READING VS MATH</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
 <p>The graphs above are three scatterplots of reading vs math test scores, separated based on the year the test was taken. The two main takeaways here are that there seems to be a strong positive correlation between reading and math scores in all three years, as one might expect. In other words, schools that performed well in math usually did well on reading too, and vice-versa. There were a few outliers each year, where some schools did noticeably better on math than on reading. There were also a few, less noticeable, schools who performed slightly better on ELA than on math.<br />
 The second big takeaway from these scatterplots is that math scores were much lower in 2022 than in years prior. There is also more variance in scores in 2022, which is demonstrated by the cluster of points being longer and wider than in the other two years. We can likely attribute this to the onset of the Covid-19 global pandemic, which abruptly forced students to adapt to online learning for anywhere between six months to an entire school year.</p>
 <p>Now that we determined the relationship between success on both exams, we decided to investigate which exam students actually performed better on, over the years. Again, we are looking at this data on the school level because there is more data to work with. Note that the pink is ELA and the blue is Math. The places where they overlap, creating the light-purple color,</p>
-<p>PLOT 2: OVERLAPPING HISTOGRAMS OF MATH/ELA SCORES FOR ALL 3 YEARS (GOAL: SEE WHICH STUDENTS PERFORM BETTER ON)</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
 <p>Looking at the histogram, we can see that there is a lot of overlap between scores in both subjects in this three year sample size. At first glance, it seems like student’s are performing slightly better on math than ELA, although both distributions look normal. Looking at the 5 number summaries for both groups, the most notable differences are that ELA has a min score of 559 compared to Math’s min score of 571 and that ELA’s median score is ~3 points higher than Math’s.<br />
 In order to test the significance of the difference in test scores, we can utilize the t-test. Our null-hypothesis is that the two sample means are equal (or that the test scores are the same).</p>
@@ -228,22 +226,6 @@ This plot is extremely interesting because many Districts performed better on EL
 <p>There seems to be a slight positive association between ENI and %SWD each year, as noted by the trend from dark to lighter in the region around (0.5,0.15). Furthermore, the shape of the entire cluster itself loosely shows an increase in ENI as %SWD increases. This is interesting because disability status is not one of the explicit factors in calculating a student/school’s ENI. Students with disabilities deserve any necessary accommodations that will supplement their academic experience, yet the NYC DOE doesn’t explicitly factor this into an individual student’s need for funding. One might find it interesting to look at dropout rates of disabled students vs their ENI’s if they wish to learn more.</p>
 <p>Next, we dove into the racial demographics of each district. We created a new “% POC” column in the data in order to plot race by district (which included the missing racial data group). We acknowledge the limitations of viewing race in the data as binary, which it is certainly not in real life. If one wishes to repeat this process, we would suggest potentially binning the data or creating a new “majority” categorical column that shows the leading racial demographic by percentage in a particular school/district.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
-<pre><code>## &lt;ggproto object: Class FacetWrap, Facet, gg&gt;
-##     compute_layout: function
-##     draw_back: function
-##     draw_front: function
-##     draw_labels: function
-##     draw_panels: function
-##     finish_data: function
-##     init_scales: function
-##     map_data: function
-##     params: list
-##     setup_data: function
-##     setup_params: function
-##     shrink: TRUE
-##     train_scales: function
-##     vars: function
-##     super:  &lt;ggproto object: Class FacetWrap, Facet, gg&gt;</code></pre>
 <p>From these boxplots, you can see that most NYC School Districts are primarily comprised of students of color. This is important to keep in mind when we investigate the relationship between race (as we have defined it here) and standardized testing success in our next plot. There is one outlier district each year, District 31, whose percentage of students of color is below 60 (but increasing each year). Looking back at our Cleveland Dot plots, District 31 performed in the top 11 in both Math &amp; ELA every year, which is above average but not overwhelmingly great.</p>
 <p>Now, we will look at all of the different student demographics of interest and determine the relationships between them all and test scores. In both of the following parallel coordinate plots, our factors of interest are score, total enrollment, % of students with disabilities, % of English language learners, % of students living in poverty, and % of students of color. We will do this using district data, because there is too much noise in the plot if we do it by district instead. The first plot is for ELA scores, and the second is for Math.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>

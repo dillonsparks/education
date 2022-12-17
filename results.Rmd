@@ -21,8 +21,6 @@ district <- read_csv("../District.csv")
 
 In investigating the relationship between Reading and Math scores, we started very broad by asking ourselves if there is a correlation between success on Math & success on ELA. We chose to break this down at the school level, because there is a lot more data for us to work with. 
 
-PLOT 1: READING VS MATH 
-
 ```{r}
 r_v_m <- ggplot(data = school) +
        geom_point(aes(x = school$`Mean Scale Score_e`, y = school$`Mean Scale Score_m`, alpha =0.5)) + 
@@ -39,7 +37,6 @@ The second big takeaway from these scatterplots is that math scores were much lo
 
 Now that we determined the relationship between success on both exams, we decided to investigate which exam students actually performed better on, over the years. Again, we are looking at this data on the school level because there is more data to work with. Note that the pink is ELA and the blue is Math. The places where they overlap, creating the light-purple color, 
 
-PLOT 2: OVERLAPPING HISTOGRAMS OF MATH/ELA SCORES FOR ALL 3 YEARS (GOAL: SEE WHICH STUDENTS PERFORM BETTER ON)
 
 ```{r}
 c1 <- rgb(173,216,230,max = 255, alpha = 80, names = "lt.blue")
@@ -140,7 +137,7 @@ district$Y <- as.character(district$Year)
 ggplot(district, aes(x= district$`% POC`)) +
   geom_boxplot() +
   ggtitle("Boxplot of % POC by District each Year") + 
-  labs(x = "Percentage of Students of Color")
+  labs(x = "Percentage of Students of Color")+
   facet_wrap(~Y)
 ``` 
 
