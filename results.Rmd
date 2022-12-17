@@ -179,5 +179,4 @@ ggparcoord(district,
            #groupColumn = 20,
            splineFactor=10)
 ```
-(Add final interpretation)
-
+We switched around the order of the factors for this second graph in order to see if we noticed anything new. Now, we can see a slight negative association between the percentage of students of color and total enrollment, and a strong negative association between both math scores and the percentage of students living in poverty and the percentage of English language learners and math scores.  
