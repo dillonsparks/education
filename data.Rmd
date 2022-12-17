@@ -281,6 +281,7 @@ For our exploratory data analysis of the missing testing data, we decided to use
 ```{r echo=FALSE}
 ggplot(data = new_school_data, aes(x = X..Missing.Race.Ethnicity.Data)) + geom_histogram(color = "black", binwidth = .001) + xlab("Missing Race/Ethnicity") + ylab("Frequency") + ggtitle("Frequency of Missing Data") + theme(plot.title = element_text(hjust = 0.5))
 ```
+
 Ridgeline plot for district by the amount of students that tested.   
 
 The ridgeline plots look at the percentage of students that tested in Math and ELA by district from the  2017-2018, 2018-2019, and 2021-2022 academic years. Originally, we wanted to facet the data by year and see if there were any differences across districts, however there is only one entry per year for each district, so that would not be helpful (or produce a ridgeline plot). We found that the distributions were very similar across both subjects. In neither Math or ELA was there more than 50% students tested. For districts 7 and 8, in both ELA and Math, there is some slight overlap. This means that some of the entries for those two districts may be the same or close in value. In the math scores, we can also see a very small overlap with districts 24 and 25. Both overlaps are miniscule.
