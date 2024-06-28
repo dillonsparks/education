@@ -1,0 +1,16 @@
+introduction
+proposal
+research-topic
+data-availability
+data
+sources
+transformation
+missing-value-analysis
+results
+plots-and-notes-part-1-reading-vs.-math-test-scores-the-covid-19-pandemic
+plots-notes-part-2-nyc-student-demographics-indicators-of-success
+interactive-component
+conclusion
+appendix
+data-cleaningtransformation
+start-here

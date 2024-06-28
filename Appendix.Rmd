@@ -1,0 +1,44 @@
+# Appendix 
+
+## Data Cleaning/Transformation
+
+<ol> 
+<li> Reading in the six different data sets from the sources listed in [Section 2.2](https://dillonsparks.github.io/education/proposal.html#data-availability) </li>
+
+<li> Data Transformation
+<ol>
+<li> Prepping the individual datasets to be joined, starting with getting rid of unnecessary years </li>
+
+<li> Converting years of demographics spreadsheets to single year format instead of school year </li>
+
+<li> Renaming the "District" column in the demographics dataset so it matches with the ELA/Math ones by district </li>
+
+<li> Converting "Year" columns of both demographics datasets & "District" column of the demographic district dataset to numeric so they match the Math/ELA datasets </li>
+
+<li> Selecting the rows where data for "All Grades" is used in the Math/ELA spreadsheets </li>
+
+
+<li> Renaming all of the columns in the Math/ELA spreadsheets so we know which scores correspond to which test after everything is joined. The "_m" suffix corresponds to a Math score, and the "_e" suffix corresponds to an ELA score </li>
+
+</ol>
+</li>
+
+<li> Joining datasets (one for school, one for district) </li>
+
+<li> Adding a new column in each dataframe that shows the percentage of students in a given district/school who sat for testing in a given year </li>
+
+<li> Getting rid of unnecessary columns in each of the combined dataframes </li>
+
+<li> Getting rid of the "Above 95%" entries in each dataframe- replacing it with 0.95 for the sake of analysis. Then converting numeric columns to numeric again </li>
+
+<li> Imputing all missing values with the mean of the column; too many rows/columns to create a heatmap and only 2 missing values (one in the Math scores and one in the ELA scores) so we will just impute them with the mean value for each category and analyze the other missing values later </li>
+
+<li> Creating a % POC column (that sums all of the other races) for racial analysis of data </li>
+
+<li> Renaming specific columns for visibility in plots </li>
+
+<li> Writing two new csv's so we don't have to touch any of the old dataframes/csv's anymore </li>
+
+</ol>
+
+

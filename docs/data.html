@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Data | Education</title>
+  <meta name="description" content="Chapter 3 Data | Education" />
+  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Data | Education" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Data | Education" />
+  
+  
+  
+
+<meta name="author" content="Woomy Michel and Dillon Sparks" />
+
+
+<meta name="date" content="2024-06-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="proposal.html"/>
+<link rel="next" href="results.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">edu</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="proposal.html"><a href="proposal.html"><i class="fa fa-check"></i><b>2</b> Proposal</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="proposal.html"><a href="proposal.html#research-topic"><i class="fa fa-check"></i><b>2.1</b> Research topic</a></li>
+<li class="chapter" data-level="2.2" data-path="proposal.html"><a href="proposal.html#data-availability"><i class="fa fa-check"></i><b>2.2</b> Data availability</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>3</b> Data</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data.html"><a href="data.html#sources"><i class="fa fa-check"></i><b>3.1</b> Sources</a></li>
+<li class="chapter" data-level="3.2" data-path="data.html"><a href="data.html#transformation"><i class="fa fa-check"></i><b>3.2</b> Transformation</a></li>
+<li class="chapter" data-level="3.3" data-path="data.html"><a href="data.html#missing-value-analysis"><i class="fa fa-check"></i><b>3.3</b> Missing value analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>4</b> Results</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="results.html"><a href="results.html#plots-and-notes-part-1-reading-vs.-math-test-scores-the-covid-19-pandemic"><i class="fa fa-check"></i><b>4.1</b> Plots and notes: Part 1 (Reading vs. Math test scores &amp; the Covid-19 pandemic)</a></li>
+<li class="chapter" data-level="4.2" data-path="results.html"><a href="results.html#plots-notes-part-2-nyc-student-demographics-indicators-of-success"><i class="fa fa-check"></i><b>4.2</b> Plots + Notes: Part 2 (NYC Student Demographics &amp; Indicators of success)</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>5</b> Interactive component</a></li>
+<li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Conclusion</a></li>
+<li class="chapter" data-level="7" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>7</b> Appendix</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="appendix.html"><a href="appendix.html#data-cleaningtransformation"><i class="fa fa-check"></i><b>7.1</b> Data Cleaning/Transformation</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Education</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="data" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Data<a href="data.html#data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="sources" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Sources<a href="data.html#sources" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The NYC Department of Education was responsible for collecting and publishing this data. The school-level test scores were collected after they were administered and graded, and then this data was used to calculate the district-level test scores. The demographic information was collected using both the student’s information once they entered the NYC public school system, and census data. We chose to use standardized testing data from grades 3-8 over Regent’s scores (the high school equivalent of these elementary and middle school tests) because there are more middle and elementary schools in the city, and thus, more data to work with. The data was pulled from six different spreadsheets, with categorical and numerical data, with a range of 16 to 44 variables. The two largest spreadsheets had 37,000+ observations, while the smallest had only 175. The datasets did not have many issues, as there were only two missing observations in total; both were test scores for a specific school in a specific year (one Math and one ELA). However, there was a great deal of data transformation, merging, and cleaning that needed to be done in order to investigate some of the questions brought forth earlier.</p>
+</div>
+<div id="transformation" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Transformation<a href="data.html#transformation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Here is a brief overview of the data cleaning and transformation processes. You can find a more detailed version of our steps in Section 7.1 of the Appendix. First, we read in the six different datasets from the sources described in the previous section. Next, we prepped the individual datasets to be joined by filtering, converting variables to the appropriate types, aggregating from individual grade to the school/district level, imputing missing values, removing unnecessary variables, and renaming variables for consistency sake. Additionally, we added columns to each dataset for the percentage of students tested for each exam and the percentage of students of color. Finally, we wrote two new files with the joined data.</p>
+</div>
+<div id="missing-value-analysis" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Missing value analysis<a href="data.html#missing-value-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>After importing our two new datasets, we can see that there are no more NA’s in either.</p>
+<pre><code>##                DBN               Year Mean.Scale.Score_e Mean.Scale.Score_m 
+##                  0                  0                  0                  0 
+##   Total.Enrollment           X..Asian 
+##                  0                  0</code></pre>
+<pre><code>##           District               Year Mean.Scale.Score_e Mean.Scale.Score_m 
+##                  0                  0                  0                  0 
+##   Total.Enrollment           X..Asian 
+##                  0                  0</code></pre>
+<p>However, the missing values are accounted for in the school and district datasets via the “% Missing Race/Ethnicity” and “% tested_e”/“% tested_m” columns. Our approach is to start by looking for missing values by filtering the “% Missing Race/Ethnicity” column and looking at the percentage of missing data.</p>
+<p>First we will find the minimum and maximum values for missing data in this column to determine the range of missing race/ethnicity data. Using the min() and max() functions, we discovered that the percent of missing data lies between 0% and ~ 6.7% for the school dataset and 0.09% and 2.4% for the district dataset. It’s good to note that the district data doesn’t have a large number of missing values because districts are comprised of schools and data has to be reported to the district each school belongs in. If a large amount of district data was missing, we’d have to question where a bunch of the individual school data went.</p>
+<p>Before using data visualization methods, we thought it’d be important to look at the missing data in intervals of 0.2 for the school data.</p>
+<p>We found that:<br />
+* 2421 rows in the school dataset have no missing values.<br />
+* 864 rows in the school dataset have between 0% and 2% missing data.<br />
+* 36 rows in the school dataset have between 2% and 4% missing data.<br />
+* 4 rows in the school dataset have between 4% and 6% missing data.<br />
+* 3 rows in the school dataset have more than 6% missing data.</p>
+<p>For the district data, we thought it’d be nice to look at it by intervals of 0.005.</p>
+<p>We found that:<br />
+- 0 rows in the district dataset have no missing values.<br />
+- 61 rows in the district dataset have between 0% and 0.5% missing data.<br />
+- 26 rows in the district dataset have between 0.5% and 1% missing data.<br />
+- 8 rows in the district dataset have between 1% and 1.5% missing data.<br />
+- 0 rows in the district dataset have between 1.5% and 2% missing data.<br />
+- 1 row in the district has over 2% missing data.</p>
+<p>For our exploratory data analysis of the missing testing data, we decided to use a histogram. Histograms are good because they’re able to show frequency distributions. We found that the data was right-skewed. We can conclude from the visualization that majority of the schools are not missing data as it relates to racial and ethnic demographic data. This was also shown in our preliminary process, where we noted 2421 rows were not missing data, which is roughly 73% of our dataset.The remaining 27% of the data was missing about 6.7% of data, which is not too bad.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p>Ridgeline plot for district by the amount of students that tested.</p>
+<p>The ridgeline plots look at the percentage of students that tested in Math and ELA by district from the 2017-2018, 2018-2019, and 2021-2022 academic years. Originally, we wanted to facet the data by year and see if there were any differences across districts, however there is only one entry per year for each district, so that would not be helpful (or produce a ridgeline plot). We found that the distributions were very similar across both subjects. In neither Math or ELA was there more than 50% students tested. For districts 7 and 8, in both ELA and Math, there is some slight overlap. This means that some of the entries for those two districts may be the same or close in value. In the math scores, we can also see a very small overlap with districts 24 and 25. Both overlaps are miniscule.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="proposal.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="results.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dillonsparks/education/edit/main/data.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/dillonsparks/education/blob/main/data.Rmd",
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+# Conclusion
+
+One of our biggest findings was that Math and ELA scores (by district) were relatively similar for each of the three years that our data was collected, despite the fact that the Covid-19 pandemic impacted them in nearly opposite ways. As expected, success in one subject usually came with success in the other. Secondly, there was a wide range of variance in scores (for both subjects) across Districts. The demographics that we explored in part 2, such as percentage of students in poverty and percentage of English language learners, all have an effect on test scores (along with other things that are not included in the data). Finally, as the general public is slowly starting to realize, there are many issues with standardized testing and the many negative correlations that we saw in our parallel coordinates plots lend credence to this idea. There is countless research available that details the harmful effects of these tests in an attempt to abolish them altogether. Here is a great place to start reading if you are interested:
+https://www.nea.org/advocating-for-change/new-from-nea/racist-beginnings-standardized-testing 
+ 
+Now, moving to the limitations of our research. Standardized testing is not always the best measure of academic success; we used the two interchangeably in our analysis of the data, because we do not have access to the large scale, quantitative and qualitative data that is necessary to paint the full picture of a student’s academic performance. 
+As mentioned before, the way we viewed race in our analysis was binary and did not leave much room for nuance that exists within the classroom and beyond
+
+Looking forward, introducing the school satisfaction survey and integrating it into our analysis of the education that a school/district is provides its students would be interesting. The aforementioned survey can be found here: https://infohub.nyced.org/reports/school-quality/nyc-school-survey
+ 
+The biggest lesson we learned is data cleaning is a long and detailed process that truly shapes your visualizations and analysis. You may have to go back and forth between cleaning/transforming the data and visualizing/analyzing multiple times, if you really want to view your data from as many different perspectives as possible. 
