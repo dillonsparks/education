@@ -10,6 +10,7 @@ library(ggridges)
 library(ggpubr)
 library(formattable)
 library(RColorBrewer)
+library(moments)
 ```
 
 
@@ -19,8 +20,93 @@ district <- read_csv("../District.csv")
 ```
 
 
-## Plots and notes: Part 1 (Reading vs. Math test scores & the Covid-19 pandemic)
+## Analyzing standardized test scores 
 
+### Descriptive Statistics
+
+```{r}
+
+get_desc_stat = function(df, year, stat, subject) {
+  
+  ## Filtering by subject & year: 
+  
+  if (subject == "Math") {
+    data = df |> filter(Year == year) |> pull(`Mean Scale Score_m`)
+  }
+  else if (subject == "ELA") {
+    data =  df |> filter(Year == year) |> pull(`Mean Scale Score_e`)
+  }
+  
+  ## Retrieving the desired stat for the desired subject:
+
+ if (stat == "var") {
+   desc_stat = var(data) |> round(digits = 2)
+ }
+  
+  else if (stat == "sd") {
+    desc_stat = sd(data)  |> round (digits = 2)
+  }
+  
+  else if (stat == "mean") {
+    desc_stat = mean(data)  |> round (digits = 2)
+  } 
+  
+  else if (stat == "max") {
+    desc_stat = max(data)  |> round (digits = 2)
+  }
+  
+  else if (stat == "min") {
+    desc_stat = min(data)  |> round (digits = 2)
+  } 
+  
+  else if (stat == "kurtosis") {
+    desc_stat = kurtosis(data)  |> round (digits = 2)
+  }
+  
+  else if (stat == "skewness") {
+    desc_stat = skewness(data)  |> round (digits = 2)
+  }
+  
+  else if (stat == "Shapiro-Wilk p value") {
+    desc_stat = shapiro.test(data)$p.value  |> round (digits = 2)
+  }
+  
+  
+  else {
+    stop("Invalid stat provided")
+  }
+  return(desc_stat)
+}
+
+
+get_stat_matrix = function(df, years, stats, subject) {
+  
+  stat_matrix = matrix(data = NA, nrow = length(stats), ncol = length(years))
+  
+  for (j in 1:length(years)) {
+    
+    for (i in 1:length(stats)) {
+      
+      stat_matrix[i,j] = get_desc_stat(df, years[j], stats[i], subject)
+      
+    }
+    
+  }
+  
+  stat_df = data.frame(stat_matrix)
+  colnames(stat_df) = years
+  rownames(stat_df) = stats
+  return(stat_df)
+}
+
+desc_stats = c("min", "max", "mean", "sd", "var","kurtosis", "skewness", "Shapiro-Wilk p value")
+test_years = c("2018", "2019", "2022")
+
+formattable(get_stat_matrix(school, test_years, desc_stats, "Math"))
+formattable(get_stat_matrix(school, test_years, desc_stats, "ELA"))
+```
+
+### Reading vs. Math Scatterplot
 In investigating the relationship between Reading and Math scores, we started very broad by asking ourselves if there is a correlation between success on Math & success on ELA. We chose to break this down at the school level, because there is a lot more data for us to work with. 
 
 ```{r}
@@ -29,56 +115,37 @@ r_v_m <- ggplot(data = school) +
        xlab('Mean ELA Score') +
        ylab('Mean Math Score') +
        ggtitle('Test Scores by School') +
-       facet_wrap(school$Year)
-r_v_m
+       facet_wrap(~Year) 
+r_v_m + geom_abline(color = "red")
+
 ```
 
 The graphs above are three scatterplots of reading vs math test scores, separated based on the year the test was taken. The two main takeaways here are that there seems to be a strong positive correlation between reading and math scores in all three years, as one might expect. In other words, schools that performed well in math usually did well on reading too, and vice-versa. There were a few outliers each year, where some schools did noticeably better on math than on reading. There were also a few, less noticeable, schools who performed slightly better on ELA than on math.  
 
+
+### Correlation Analysis
+
 Let's find the correlation between the Math and ELA scores to gain more insight on them analytically: 
 
-```{r}
-normal_test = function(df, year) {
-  normal = list()
-  df_year <- df |> filter(Year == year) 
-  if (shapiro.test(df_year |> pull(`Mean Scale Score_m`))$p.value > 0.05) {
-    normal = append(normal, c("Math", year))
-  }
-  if (shapiro.test(df_year |> pull(`Mean Scale Score_e`))$p.value > 0.05) {
-    normal = append(normal, c("ELA", year))
-  }
-  if (length(normal) == 0) {
-    sprintf("Neither the Math nor the ELA scores are normally distributed in %s.", year)
-  }
-  else {
-    return(normal)
-  }
-} 
+Since the Math and ELA scores are not normally distributed in any year we will use the Spearman's correlation to examine the strength of the linear relationship between scores in each year. The data meets the assumptions for calculating Spearman's correlation coefficient because test scores each year are on an interval scale, they represent paired observations, and they have a monotonic relationship (as shown above). This is what we get: 
 
-for (y in (school$Year |> unique())) {
-  print(normal_test(school, y))
-}
-```
-
-Since the Math and ELA scores are not normally distributed in any year we will use the Pearson's correlation to determine the linear relationship between scores in each year. This is what we get: 
-
-```{r, echo = FALSE}
-get_pearson_corr = function(df, year) {
+```{r, echo = FALSE, warning=FALSE}
+get_spearman_corr = function(df, year) {
   math = df |> filter(Year == year) |> pull(`Mean Scale Score_m`)
   ela = df |> filter(Year == year) |> pull(`Mean Scale Score_e`)
-  pearson_result <- cor.test(math, ela, method = "pearson")$estimate
-  return(pearson_result)
+  spearman_result <- cor.test(math, ela, method = "spearman")$estimate |> round(3)
+  return(spearman_result)
 }
 
 get_corr_matrix = function(df, years) {
   corr_matrix = matrix(data = NA, nrow = 1, ncol = length(years))
   for (i in 1:length(years)) {
-      corr = get_pearson_corr(df, years[i])
+      corr = get_spearman_corr(df, years[i])
       corr_matrix[1,i] = corr
   }
   corr_df = data.frame(corr_matrix)
   colnames(corr_df) = years
-  rownames(corr_df) = "Correlation"
+  rownames(corr_df) = "Spearman correlation coefficient"
   return(corr_df)
 }
 
@@ -91,42 +158,14 @@ The second big takeaway from these scatterplots is that math scores were much lo
 
 Let's look at the spread of the scores during these years: 
 
-```{r}
-get_math_var = function(df, year) {
-  math = df |> filter(Year == year) |> pull(`Mean Scale Score_m`)
-  math_var = var(math)
-  return(math_var)
-}
-
-get_ela_var = function(df, year) {
-  ela = df |> filter(Year == year) |> pull(`Mean Scale Score_e`)
-  ela_var = var(ela)
-  return(ela_var)
-}
-
-get_var_matrix = function(df, years) {
-  corr_matrix = matrix(data = NA, nrow = 2, ncol = length(years))
-  for (i in 1:length(years)) {
-      math_var = get_math_var(df, years[i])
-      ela_var = get_ela_var(df, years[i])
-      corr_matrix[1,i] = math_var
-      corr_matrix[2,i] = ela_var
-  }
-  corr_df = data.frame(corr_matrix)
-  colnames(corr_df) = years
-  rownames(corr_df) = c("Math", "ELA")
-  return(corr_df)
-}
-
-formattable(get_var_matrix(school, c("2018", "2019", "2022")), color = "cornflowerblue")
-```
-
 Looking at this table we can confirm that the variance was higher for Math & ELA in 2022. 
+
+### Density Histogram of Test Scores
 
 Now that we've investigated the relationship between success on both exams, we want to know which exam students actually performed better on, over the years. Again, we are looking at this data on the school level because there is more data to work with. 
 
 ```{r}
-scores = school |> select(Year, `Mean Scale Score_e`, `Mean Scale Score_m`) |>
+scores = school |> select(Year, `Mean Scale Score_e`, `Mean Scale Score_m`, DBN) |>
   pivot_longer(cols = c("Mean Scale Score_e", "Mean Scale Score_m")) |>
   mutate(Test = case_when(name == "Mean Scale Score_e" ~ "ELA",
                    name == "Mean Scale Score_m" ~ "Math")) |>
@@ -134,23 +173,59 @@ scores = school |> select(Year, `Mean Scale Score_e`, `Mean Scale Score_m`) |>
            rename(score = value, year = Year)
 
 
-ggplot(data = scores, aes(score, fill = Test)) + geom_density(alpha = 0.5) + facet_wrap("year") + theme_bw(14)
+ggplot(data = scores, aes(score, fill = Test)) + 
+  geom_density(alpha = 0.5) + 
+  facet_wrap(~year) + 
+  theme_bw(14) + 
+  scale_fill_manual(values = c("ELA" = "cornflowerblue", "Math" = "red"))
+  
 ```
 
 
 Looking at our density histograms, we can see that there is a lot of overlap between scores in both subjects in this three year sample size. At first glance, it seems like student's are performing slightly better on ELA than Math.
 
+### Confidence Intervals
 
 In order to test the significance of the difference in test scores, we can utilize the t-test. Our null-hypothesis is that the two sample means are equal (or that the test scores are the same).
 
 
-### START HERE
+
+
 ```{r echo=FALSE}
-# t.test(Mean_Scores, 
-#        school$`Mean Scale Score_m`, 
-#        paired = TRUE, 
-#        mu = 0, 
-#        conf.level = 0.99)
+get_wilcox_test = function(year, df) {
+  x = df |> filter(year == year, Test == "Math") |> pull(score)
+  y = df |> filter(year == year, Test == "ELA") |> pull(score)
+  test = wilcox.test(x,
+       y, 
+       conf.int = TRUE, 
+       conf_level = 0.95, 
+       paired = TRUE,
+       mu = 0)
+  return(test)
+}
+
+
+get_conf_int_table = function(df) {
+  num_years = length(df$year |> unique())
+  conf_int_matrix = matrix(data = NA, nrow = num_years, ncol = 3)
+  
+  for (i in 1:num_years) {
+    current_year = unique(df$year)[i]
+    conf_int = get_wilcox_test(current_year, df)$conf.int
+    conf_int_matrix[i,1] = conf_int[1] |> round(digits = 3)
+    conf_int_matrix[i,2] = conf_int[2] |> round(digits = 3)
+    conf_int_matrix[i,3] = get_wilcox_test(current_year, df)$p.value |> round(digits = 3)
+    
+  }
+  
+  conf_int_df = data.frame(conf_int_matrix)
+  rownames(conf_int_df) = df$year |> unique()
+  colnames(conf_int_df) = c("Lower boundary", "Upper boundary", "Wilcox test p-value")
+  
+  return(formattable(conf_int_df))
+}
+
+get_conf_int_table(scores)
 ```
 
 Looking at the result of our t-test, we cannot reject the null hypothesis that our two sample means are the same, even at the 1% level of significance! Therefore, there is no evidence of a significant difference between math & reading scores during the three year period that our data comes from.  
@@ -158,52 +233,10 @@ Looking at the result of our t-test, we cannot reject the null hypothesis that o
 Even when we repeat the test only looking at the year 2022 (where we noticed a bigger difference than years prior in our density histogram), there is still not enough evidence to reject the null hypothesis that the two sample means are the same, once again at the 1% level of significance. 
 
 
-```{r, echo=FALSE}
-math_2022 <- school |> filter(Year == 2022) |> pull(`Mean Scale Score_m`)
-ela_2022 <- school |> filter(Year == 2022) |> pull(`Mean Scale Score_e`)
-
-t.test(x=ela_2022,
-       y=math_2022,
-       paired = TRUE, 
-       mu = 0, 
-       conf.level = 0.99)
-```
+## Analyzing student demographics
 
 
-Now that we have seen there is no significant difference in the relationship between math & reading scores, even since the onset of the Covid-19 pandemic, we decided to investigate how scores have changed within one subject over time. We started by creating a Cleveland Dot Plot of Math scores in each district, for the 3 years of data we have. We chose to use the district data here because there are over 1,000 schools and that is not feasible for creating a Cleveland Dot Plot. 
 
-```{r, echo=FALSE}
-cdp_math <- ggplot(district, aes(x = district$`Mean Scale Score_m`, y = fct_reorder(as.character(district$District), district$`Mean Scale Score_m`), color = as.character(Year))) +
-       geom_point() +
-       ggtitle("Mean Math Scores by District") +
-       theme_linedraw() +
-       xlab(" ") +
-       ylab("District") + 
-       labs(color = "Year")
-cdp_math 
-```
-
-The first thing that we noticed about this plot was the trend in scores over time; scores increased from 2018 to 2019, then decreased significantly for nearly every district in 2022, so much so that they are far below the 2018 scores! This drop off in 2022 can largely be explained due to Covid-19, but we do not have any proposed evidence for the nearly uniform increase in scores from 2018 to 2019. One notable exception to these observations is District 1, who dropped from 2019 to 2022, but still performed better in 2022 than 2018. There is also a lot of variation in scores between districts, which supports the claim that all public schools do not have access the same resources and quality of education. 
-
-Next, we did the same for ELA scores:
-
-
-```{r, echo=FALSE}
-cdp_ela <- ggplot(district, aes(x = district$`Mean Scale Score_e`, y = fct_reorder(as.character(district$District), district$`Mean Scale Score_e`), color = as.character(Year))) +
-      geom_point() +
-      ggtitle("Mean ELA Scores by District") +
-      theme_linedraw() +
-      xlab(" ") +
-      ylab("District") +
-      labs(color = "Year")
-cdp_ela
-```
-
-This plot is extremely interesting because many Districts performed better on ELA in 2022 than in years prior! Furthermore, 2019 is the year where students performed the lowest for the majority of the districts, which is the exact opposite of what the Math dot plot told us. It is difficult to conclude why we see these different trends when we break down the data by subject then year. One suggestion is that students' reading and critical thinking skills were challenged more than ever since the beginning of quarantine, when many people relied on social media posts articles to get the majority of their information regarding the ongoing global crisis. Their relationship with math and any quantitative skills may not have been integrated into their daily lives in the same way. Furthermore, year to year variance in test difficulty may explain some of the variance in scores.
-(Note; the 2018/2019 ELA scores for District 4 are nearly identical, so it looks like we're missing a year of data)  
-
-
-## Plots + Notes: Part 2 (NYC Student Demographics & Indicators of success)
 For the second part of our analysis, we decided to explore the demographics of NYC schools, and how students' identities impact their success on standardized testing. We started off by trying to learn more about how disability and funding interact in each school. The data includes an "Economic Need Index" (ENI) category that is the Department of Education's internal metric for determining for creating a student's individual funding needs. A student's ENI is calculated using things like their housing status, English language learner status, eligibility for public assistance, and family income. You can learn more about how ENI's are calculated at the student and school level here: (https://data.cccnewyork.org/data/map/1371/student-economic-need-index#1371/a/5/1622/127/a/a)  
 
 We created a heatmap of each schools' percentage of students with a disability vs their ENI
@@ -267,3 +300,12 @@ ggparcoord(district,
 ```
 
 We switched around the order of the factors for this second graph in order to see if we noticed anything new. Now, we can see a slight negative association between the percentage of students of color and total enrollment, and a strong negative association between both math scores and the percentage of students living in poverty and the percentage of English language learners and math scores.  
+
+
+### Regression should be here!!
+```{r}
+lm_school = school |> select(c(`Mean Scale Score_e`, `Mean Scale Score_m`, `% Asian`, `% Poverty`, `% ELL`, `% SWD`, `% White`, `% Black`, `% Hispanic`))
+reg = lm(`Mean Scale Score_e` ~ ., data = lm_school)
+summary(reg)
+```
+

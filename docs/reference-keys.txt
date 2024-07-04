@@ -14,3 +14,14 @@ interactive-component
 conclusion
 appendix
 data-cleaningtransformation
+regression-should-be-here
+needs-way-more-analysis-of-student-demographics
+needs-way-more-analysis-of-student-demographics-can-add-a-stacked-barchart-for-each-race
+analyzing-standardized-test-scores
+eda
+reading-vs.-math-scatterplot
+correlation-analysis
+density-histogram-of-test-scores
+confidence-intervals
+analyzing-student-demographics
+descriptive-statistics
