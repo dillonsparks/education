@@ -31,3 +31,5 @@ other-demographics-at-the-citywide-level
 how-does-demographic-information-impact-student-performance
 what-is-the-association-between-each-identity-that-a-student-holds
 descriptive-statistics-1
+descriptive-statistics-diversity-scores
+regression-analysis

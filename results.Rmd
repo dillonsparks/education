@@ -336,18 +336,19 @@ citywide |>
 
 
 
-### Diversity score
-```{r}
-test_simpson = citywide |> filter(Year == "2018") |> select (-c("Year")) |> select(c("Asian", "Black", "Hispanic", "White", "Other"))
-simpson(test_simpson)
-```
-
-(Diversity Index) [https://geographyfieldwork.com/Simpson'sDiversityIndex.htm#:~:text=Simpson's%20Diversity%20Index%20is%20a,evenness%20increase%2C%20so%20diversity%20increases.&text=The%20value%20of%20D%20ranges%20between%200%20and%201.]
 
 
-### Descriptive statistics
+
+### Descriptive statistics & Diversity scores
+
+((Diversity Index) [https://geographyfieldwork.com/Simpson'sDiversityIndex.htm#:~:text=Simpson's%20Diversity%20Index%20is%20a,evenness%20increase%2C%20so%20diversity%20increases.&text=The%20value%20of%20D%20ranges%20between%200%20and%201.]
+)
 
 ```{r}
+
+district$Diversity = apply(district[,c("% Asian", "% Black", "% Hispanic", "% White", "% Multi-Racial", "% Native American", "% Missing Race/Ethnicity Data")], 1, simpson)
+
+
 district_agg = district |> 
                mutate(Asian = `Total Enrollment`* `% Asian`,
                   Black = `Total Enrollment`* `% Black`,
@@ -357,38 +358,82 @@ district_agg = district |>
                   ELL = `Total Enrollment`* `% ELL`,
                   SWD = `Total Enrollment`* `% SWD`,
                   Poverty = `Total Enrollment`* `% Poverty`)|> 
-           select(District, Asian, Black, Hispanic, White, Other, ELL, SWD, Poverty, `Total Enrollment`, ENI) |> 
+           select(District, Diversity, Asian, Black, Hispanic, White, ELL, SWD, Poverty, `Total Enrollment`, ENI) |> 
            group_by(District) |> 
            summarise(Asian = sum(Asian)/sum(`Total Enrollment`), 
                      Black = sum(Black)/sum(`Total Enrollment`),
                      Hispanic = sum(Hispanic)/sum(`Total Enrollment`),
                      White = sum(White)/sum(`Total Enrollment`),
-                     Other = sum(Other)/sum(`Total Enrollment`),
                      ELL = sum(ELL)/sum(`Total Enrollment`), 
                      SWD = sum(SWD)/sum(`Total Enrollment`), 
                      Poverty = sum(Poverty)/sum(`Total Enrollment`), 
-                     ENI = mean(ENI)) |> 
-            mutate_all(funs(round(., digits = 3)))
+                     ENI = mean(ENI),
+                     Diversity = mean(Diversity)) |> 
+            mutate_all(funs(round(., digits = 2)))
 
 
 
-race_formatter <- formatter("span",
-                            style = x ~ style(
-                              display = "block",
-                              padding = "5px",
-                              `border-radius` = "4px",
-                              `background-color` = ifelse(x >= 0.5, "cornflowerblue", ""),
-                              color = ifelse(x >= 0.5, "white", "")
-                            ))
+get_significant_values = function(df, column) {
+  
+  if (column != "District") {
+  col_mean = df |> pull(column) |> mean()  
+  col_sd = df |> pull(column) |> sd()
+  lower = col_mean - 1.5 * col_sd
+  upper = col_mean + 1.5 * col_sd
+  
+  val = df |> pull(column)
+  lower_vals = val[val <= lower]
+  upper_vals = val[val >= upper]
+  
+  return(list(lower = lower_vals, upper = upper_vals))
+    
+  }
+}
+
+generate_column_formatter <- function(df, column) {
+  sig_vals <- get_significant_values(df, column)
+  
+  formatter("span",
+            style = x ~ style(
+              display = "block",
+              padding = "5px",
+              `border-radius` = "2px",
+              
+              `text-align` = "center",
+              `vertical-align` = "middle"
+            ))
+}
 
 
 
-formattable(district_agg, list(
-  Black = race_formatter,
-  Asian = race_formatter, 
-  Hispanic = race_formatter,
-  White = race_formatter
-))
+generate_column_formatter = function(df, column) {
+  
+  formatter("span",
+  style = x ~ style(
+                    display = "block",
+                    padding = "5px",
+                    `border-radius` = "2px",
+                    `background-color` = ifelse(
+                                                x %in% get_significant_values(df, column)$lower, "#015C92",
+                                                ifelse(x %in% get_significant_values(df, column)$upper, "#BCE6FF", "")
+                                                ),
+                     color = ifelse(x %in% unlist(get_significant_values(df, column)), "white", ""),
+                    `text-align` = "center",
+                    `vertical-align` = "middle"
+                    ))
+}                           
+
+
+formatters_list <- lapply(names(district_agg), function(column) {
+  generate_column_formatter(district_agg, column)
+})
+
+# Name the list elements with the column names
+names(formatters_list) <- names(district_agg)
+
+# Apply the formatters to your data frame
+formattable(district_agg, formatters_list)
+
 ```
 
 
@@ -397,9 +442,20 @@ formattable(district_agg, list(
 
 ## How does demographic information impact student performance
 
+
+### Regression Analysis 
+
 ```{r}
-lm_school = school |> select(c(`Mean Scale Score_e`, `Mean Scale Score_m`, `% Asian`, `% Poverty`, `% ELL`, `% SWD`, `% White`, `% Black`, `% Hispanic`))
-reg = lm(`Mean Scale Score_e` ~ ., data = lm_school)
-summary(reg)
+
+school$Diversity = apply(school[,c("% Asian", "% Black", "% Hispanic", "% White", "% Multi-Racial", "% Native American", "% Missing Race/Ethnicity Data")], 1, simpson)
+
+
+lm_school = school |> select(c(`Mean Scale Score_e`, `Mean Scale Score_m`, `% Poverty`, `% ELL`, `% SWD`, `ENI`, `Diversity`))
+english_reg = lm(`Mean Scale Score_e` ~ `% Poverty` + `% ELL` + `% SWD` + `ENI` + `Diversity`, data = lm_school)
+summary(english_reg)
+
+math_reg = lm(`Mean Scale Score_m` ~ `% Poverty` + `% ELL` + `% SWD` + `ENI` + `Diversity`, data = lm_school)
+summary(math_reg)
+
 ```
 
