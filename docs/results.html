@@ -110,9 +110,12 @@
 <li class="chapter" data-level="4.2.2" data-path="results.html"><a href="results.html#other-demographics-at-the-citywide-level"><i class="fa fa-check"></i><b>4.2.2</b> Other demographics at the citywide level</a></li>
 <li class="chapter" data-level="4.2.3" data-path="results.html"><a href="results.html#descriptive-statistics-diversity-scores"><i class="fa fa-check"></i><b>4.2.3</b> Descriptive statistics &amp; Diversity scores</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="results.html"><a href="results.html#how-does-demographic-information-impact-student-performance"><i class="fa fa-check"></i><b>4.3</b> How does demographic information impact student performance</a>
+<li class="chapter" data-level="4.3" data-path="results.html"><a href="results.html#regression-analysis"><i class="fa fa-check"></i><b>4.3</b> Regression Analysis</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="results.html"><a href="results.html#regression-analysis"><i class="fa fa-check"></i><b>4.3.1</b> Regression Analysis</a></li>
+<li class="chapter" data-level="4.3.1" data-path="results.html"><a href="results.html#linear-regression-english"><i class="fa fa-check"></i><b>4.3.1</b> Linear Regression (English)</a></li>
+<li class="chapter" data-level="4.3.2" data-path="results.html"><a href="results.html#linear-regression-math-scores"><i class="fa fa-check"></i><b>4.3.2</b> Linear Regression (Math scores)</a></li>
+<li class="chapter" data-level="4.3.3" data-path="results.html"><a href="results.html#glm-english"><i class="fa fa-check"></i><b>4.3.3</b> GLM (English)</a></li>
+<li class="chapter" data-level="4.3.4" data-path="results.html"><a href="results.html#glm-math"><i class="fa fa-check"></i><b>4.3.4</b> GLM (Math)</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>5</b> Interactive component</a></li>
@@ -146,6 +149,8 @@
 <h2><span class="header-section-number">4.1</span> Analyzing standardized test scores<a href="results.html#analyzing-standardized-test-scores" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="descriptive-statistics" class="section level3 hasAnchor" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Descriptive Statistics<a href="results.html#descriptive-statistics" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p> 
+ </p>
 <table class="table table-condensed">
 <thead>
 <tr>
@@ -408,17 +413,27 @@ Shapiro-Wilk p value
 </tr>
 </tbody>
 </table>
+<p> 
+ </p>
 </div>
 <div id="reading-vs.-math-scatterplot" class="section level3 hasAnchor" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Reading vs. Math Scatterplot<a href="results.html#reading-vs.-math-scatterplot" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>In investigating the relationship between Reading and Math scores, we started very broad by asking ourselves if there is a correlation between success on Math &amp; success on ELA. We chose to break this down at the school level, because there is a lot more data for us to work with.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p> 
+ </p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+ 
+ </p>
 <p>The graphs above are three scatterplots of reading vs math test scores, separated based on the year the test was taken. The two main takeaways here are that there seems to be a strong positive correlation between reading and math scores in all three years, as one might expect. In other words, schools that performed well in math usually did well on reading too, and vice-versa. There were a few outliers each year, where some schools did noticeably better on math than on reading. There were also a few, less noticeable, schools who performed slightly better on ELA than on math.</p>
+<p> 
+ </p>
 </div>
 <div id="correlation-analysis" class="section level3 hasAnchor" number="4.1.3">
 <h3><span class="header-section-number">4.1.3</span> Correlation Analysis<a href="results.html#correlation-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Let’s find the correlation between the Math and ELA scores to gain more insight on them analytically:</p>
 <p>Since the Math and ELA scores are not normally distributed in any year we will use the Spearman’s correlation to examine the strength of the linear relationship between scores in each year. The data meets the assumptions for calculating Spearman’s correlation coefficient because test scores each year are on an interval scale, they represent paired observations, and they have a monotonic relationship (as shown above). This is what we get:</p>
+<p> 
+ </p>
 <table class="table table-condensed">
 <thead>
 <tr>
@@ -452,19 +467,35 @@ Spearman correlation coefficient
 </tr>
 </tbody>
 </table>
+<p> 
+ </p>
 <p>The second big takeaway from these scatterplots is that math scores were much lower in 2022 than in years prior. There is also more variance in scores in 2022, which is demonstrated by the relatively lower correlation coefficient and the higher variance of our scatterplot than in the other two years. We can likely attribute this to the onset of the Covid-19 global pandemic, which abruptly forced students to adapt to online learning for anywhere between six months to an entire school year.</p>
 <p>Let’s look at the spread of the scores during these years:</p>
 <p>Looking at this table we can confirm that the variance was higher for Math &amp; ELA in 2022.</p>
+<p> 
+ </p>
 </div>
 <div id="density-histogram-of-test-scores" class="section level3 hasAnchor" number="4.1.4">
 <h3><span class="header-section-number">4.1.4</span> Density Histogram of Test Scores<a href="results.html#density-histogram-of-test-scores" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p> 
+ </p>
 <p>Now that we’ve investigated the relationship between success on both exams, we want to know which exam students actually performed better on, over the years. Again, we are looking at this data on the school level because there is more data to work with.</p>
+<p> 
+ </p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p> 
+ </p>
 <p>Looking at our density histograms, we can see that there is a lot of overlap between scores in both subjects in this three year sample size. At first glance, it seems like student’s are performing slightly better on ELA than Math.</p>
+<p> 
+ </p>
 </div>
 <div id="confidence-intervals" class="section level3 hasAnchor" number="4.1.5">
 <h3><span class="header-section-number">4.1.5</span> Confidence Intervals<a href="results.html#confidence-intervals" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p> 
+ </p>
 <p>In order to test the significance of the difference in test scores, we can utilize the t-test. Our null-hypothesis is that the two sample means are equal (or that the test scores are the same).</p>
+<p> 
+ </p>
 <table class="table table-condensed">
 <thead>
 <tr>
@@ -526,24 +557,42 @@ Wilcox test p-value
 </tr>
 </tbody>
 </table>
+<p> 
+ </p>
 <p>Looking at the result of our t-test, we cannot reject the null hypothesis that our two sample means are the same, even at the 1% level of significance! Therefore, there is no evidence of a significant difference between math &amp; reading scores during the three year period that our data comes from.</p>
 <p>Even when we repeat the test only looking at the year 2022 (where we noticed a bigger difference than years prior in our density histogram), there is still not enough evidence to reject the null hypothesis that the two sample means are the same, once again at the 1% level of significance.</p>
+<p> 
+ </p>
 </div>
 </div>
 <div id="analyzing-student-demographics" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Analyzing student demographics<a href="results.html#analyzing-student-demographics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p> 
+ </p>
 <div id="race-at-the-citywide-level" class="section level3 hasAnchor" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Race at the citywide level<a href="results.html#race-at-the-citywide-level" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="echarts4r html-widget html-fill-item" id="htmlwidget-a8614829e263b1346cd1" style="width:100%;height:500px;"></div>
-<script type="application/json" data-for="htmlwidget-a8614829e263b1346cd1">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"legend":{"data":["Asian","Black","Hispanic","White","Other"],"show":true,"type":"plain","right":0,"orient":"vertical","top":50},"series":[{"name":"percentage","type":"pie","radius":["50%","70%"],"itemStyle":{"borderRadius":10,"borderColor":"#fff","borderWidth":0.5},"data":[{"value":0.1818145280637012,"name":"Asian"},{"value":0.206917340074228,"name":"Black"},{"value":0.415692310953227,"name":"Hispanic"},{"value":0.1680276595323091,"name":"White"},{"value":0.02594785378954487,"name":"Other"}]}],"toolbox":{"feature":{"restore":[],"magicType":[],"dataView":[],"saveAsImage":[]}},"tooltip":{"trigger":"axis"},"color":["#EFF3FF","#BDD7E7","#6BAED6","#3182BD","#08519C"],"title":[{"left":"center","top":5,"text":"Citywide Racial Demographics of NYC Students","subtext":"Using aggregated data from 2018, 2019, and 2022"}]},"dispose":true},"evals":[],"jsHooks":[]}</script>
+<p> 
+ </p>
+<div class="echarts4r html-widget html-fill-item" id="htmlwidget-2b008b8fb457b8d08389" style="width:100%;height:500px;"></div>
+<script type="application/json" data-for="htmlwidget-2b008b8fb457b8d08389">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"legend":{"data":["Asian","Black","Hispanic","White","Other"],"show":true,"type":"plain","right":0,"orient":"vertical","top":50},"series":[{"name":"percentage","type":"pie","radius":["50%","70%"],"itemStyle":{"borderRadius":10,"borderColor":"#fff","borderWidth":0.5},"data":[{"value":0.1818145280637012,"name":"Asian"},{"value":0.206917340074228,"name":"Black"},{"value":0.415692310953227,"name":"Hispanic"},{"value":0.1680276595323091,"name":"White"},{"value":0.02594785378954487,"name":"Other"}]}],"toolbox":{"feature":{"restore":[],"magicType":[],"dataView":[],"saveAsImage":[]}},"tooltip":{"trigger":"axis"},"color":["#EFF3FF","#BDD7E7","#6BAED6","#3182BD","#08519C"],"title":[{"left":"center","top":5,"text":"Citywide Racial Demographics of NYC Students","subtext":"Using aggregated data from 2018, 2019, and 2022"}]},"dispose":true},"evals":[],"jsHooks":[]}</script>
+<p> 
+ 
+ 
+ </p>
 </div>
 <div id="other-demographics-at-the-citywide-level" class="section level3 hasAnchor" number="4.2.2">
 <h3><span class="header-section-number">4.2.2</span> Other demographics at the citywide level<a href="results.html#other-demographics-at-the-citywide-level" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="echarts4r html-widget html-fill-item" id="htmlwidget-7d2431f21708c865279b" style="width:100%;height:500px;"></div>
-<script type="application/json" data-for="htmlwidget-7d2431f21708c865279b">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"yAxis":[{"show":true}],"xAxis":[{"data":["2018","2019","2022"],"type":"category","boundaryGap":true}],"legend":{"data":["English language learners","Students with disabilities","Students living in poverty","Economic Need Index"],"show":true,"type":"plain","orient":"horizontal","bottom":10},"series":[{"data":[{"value":["2018","0.1537201"]},{"value":["2019","0.1490164"]},{"value":["2022","0.1626084"]}],"name":"English language learners","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp1"},{"data":[{"value":["2018","0.2008541"]},{"value":["2019","0.2052381"]},{"value":["2022","0.1986964"]}],"name":"Students with disabilities","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp2"},{"data":[{"value":["2018","0.7465891"]},{"value":["2019","0.7317927"]},{"value":["2022","0.7229357"]}],"name":"Students living in poverty","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp3"},{"data":[{"value":["2018","0.7282144"]},{"value":["2019","0.7247252"]},{"value":["2022","0.7215998"]}],"name":"Economic Need Index","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp4"}],"toolbox":{"feature":{"restore":[],"magicType":{"type":["line"]},"dataView":[],"saveAsImage":[]}},"tooltip":{"trigger":"axis"},"color":["#EFF3FF","#BDD7E7","#6BAED6","#2171B5"]},"dispose":true},"evals":[],"jsHooks":[]}</script>
+<p> 
+ </p>
+<div class="echarts4r html-widget html-fill-item" id="htmlwidget-cd2769416066aa8dd5b2" style="width:100%;height:500px;"></div>
+<script type="application/json" data-for="htmlwidget-cd2769416066aa8dd5b2">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"yAxis":[{"show":true}],"xAxis":[{"data":["2018","2019","2022"],"type":"category","boundaryGap":true}],"legend":{"data":["English language learners","Students with disabilities","Students living in poverty","Economic Need Index"],"show":true,"type":"plain","orient":"horizontal","bottom":10},"series":[{"data":[{"value":["2018","0.1537201"]},{"value":["2019","0.1490164"]},{"value":["2022","0.1626084"]}],"name":"English language learners","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp1"},{"data":[{"value":["2018","0.2008541"]},{"value":["2019","0.2052381"]},{"value":["2022","0.1986964"]}],"name":"Students with disabilities","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp2"},{"data":[{"value":["2018","0.7465891"]},{"value":["2019","0.7317927"]},{"value":["2022","0.7229357"]}],"name":"Students living in poverty","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp3"},{"data":[{"value":["2018","0.7282144"]},{"value":["2019","0.7247252"]},{"value":["2022","0.7215998"]}],"name":"Economic Need Index","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp4"}],"toolbox":{"feature":{"restore":[],"magicType":{"type":["line"]},"dataView":[],"saveAsImage":[]}},"tooltip":{"trigger":"axis"},"color":["#EFF3FF","#BDD7E7","#6BAED6","#2171B5"]},"dispose":true},"evals":[],"jsHooks":[]}</script>
+<p> 
+ </p>
 </div>
 <div id="descriptive-statistics-diversity-scores" class="section level3 hasAnchor" number="4.2.3">
 <h3><span class="header-section-number">4.2.3</span> Descriptive statistics &amp; Diversity scores<a href="results.html#descriptive-statistics-diversity-scores" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p> 
+ </p>
 <p>((Diversity Index) [<a href="https://geographyfieldwork.com/Simpson&#39;sDiversityIndex.htm#" class="uri">https://geographyfieldwork.com/Simpson'sDiversityIndex.htm#</a>:~:text=Simpson’s%20Diversity%20Index%20is%20a,evenness%20increase%2C%20so%20diversity%20increases.&amp;text=The%20value%20of%20D%20ranges%20between%200%20and%201.]
 )</p>
 <table class="table table-condensed">
@@ -1608,58 +1657,188 @@ Diversity
 </tr>
 </tbody>
 </table>
+<p> 
+ 
+ 
+ </p>
 </div>
 </div>
-<div id="how-does-demographic-information-impact-student-performance" class="section level2 hasAnchor" number="4.3">
-<h2><span class="header-section-number">4.3</span> How does demographic information impact student performance<a href="results.html#how-does-demographic-information-impact-student-performance" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="regression-analysis" class="section level3 hasAnchor" number="4.3.1">
-<h3><span class="header-section-number">4.3.1</span> Regression Analysis<a href="results.html#regression-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="regression-analysis" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Regression Analysis<a href="results.html#regression-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p> 
+ </p>
+<p>Need to explain which variables I am getting rid of and justify them</p>
+<p> 
+ </p>
+<div id="linear-regression-english" class="section level3 hasAnchor" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Linear Regression (English)<a href="results.html#linear-regression-english" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p> 
+ </p>
 <pre><code>## 
 ## Call:
 ## lm(formula = `Mean Scale Score_e` ~ `% Poverty` + `% ELL` + `% SWD` + 
-##     ENI + Diversity, data = lm_school)
+##     ENI + Diversity + `Total Enrollment`, data = lm_school)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -30.7458  -3.6140  -0.2434   3.4004  25.9374 
+## -28.0438  -3.6377  -0.3087   3.3546  27.5852 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 625.8110     0.6395 978.543  &lt; 2e-16 ***
-## `% Poverty`  -7.2534     1.5998  -4.534 6.00e-06 ***
-## `% ELL`      -5.6060     0.9778  -5.733 1.07e-08 ***
-## `% SWD`     -29.1861     1.6810 -17.362  &lt; 2e-16 ***
-## ENI         -21.1953     1.6354 -12.960  &lt; 2e-16 ***
-## Diversity     4.3798     0.6806   6.435 1.41e-10 ***
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)        623.480607   0.679799 917.154  &lt; 2e-16 ***
+## `% Poverty`         -8.079934   1.582318  -5.106 3.47e-07 ***
+## `% ELL`             -7.328704   0.983316  -7.453 1.16e-13 ***
+## `% SWD`            -24.488914   1.735682 -14.109  &lt; 2e-16 ***
+## ENI                -19.955934   1.620488 -12.315  &lt; 2e-16 ***
+## Diversity            3.484943   0.679004   5.132 3.02e-07 ***
+## `Total Enrollment`   0.003010   0.000325   9.262  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 5.625 on 3322 degrees of freedom
-## Multiple R-squared:  0.6553, Adjusted R-squared:  0.6548 
-## F-statistic:  1263 on 5 and 3322 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 5.555 on 3321 degrees of freedom
+## Multiple R-squared:  0.664,  Adjusted R-squared:  0.6634 
+## F-statistic:  1094 on 6 and 3321 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p> 
+ </p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  english_reg
+## BP = 183.21, df = 6, p-value &lt; 2.2e-16</code></pre>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-17-2.png" width="672" /></p>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  standardized_eng_residuals
+## W = 0.98664, p-value &lt; 2.2e-16</code></pre>
+<p> 
+ 
+ 
+ </p>
+</div>
+<div id="linear-regression-math-scores" class="section level3 hasAnchor" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> Linear Regression (Math scores)<a href="results.html#linear-regression-math-scores" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p> 
+ </p>
 <pre><code>## 
 ## Call:
 ## lm(formula = `Mean Scale Score_m` ~ `% Poverty` + `% ELL` + `% SWD` + 
-##     ENI + Diversity, data = lm_school)
+##     ENI + Diversity + `Total Enrollment`, data = lm_school)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -29.9200  -4.4477  -0.3955   4.1948  31.0179 
+## -23.9418  -4.4782  -0.4489   4.0343  30.1837 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 625.4854     0.7999 781.965  &lt; 2e-16 ***
-## `% Poverty`  -6.0238     2.0010  -3.010  0.00263 ** 
-## `% ELL`       6.0043     1.2230   4.910 9.57e-07 ***
-## `% SWD`     -36.0549     2.1025 -17.149  &lt; 2e-16 ***
-## ENI         -26.0826     2.0455 -12.751  &lt; 2e-16 ***
-## Diversity     4.6265     0.8513   5.435 5.88e-08 ***
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         6.218e+02  8.432e-01 737.381  &lt; 2e-16 ***
+## `% Poverty`        -7.348e+00  1.963e+00  -3.744 0.000184 ***
+## `% ELL`             3.245e+00  1.220e+00   2.660 0.007843 ** 
+## `% SWD`            -2.853e+01  2.153e+00 -13.252  &lt; 2e-16 ***
+## ENI                -2.410e+01  2.010e+00 -11.989  &lt; 2e-16 ***
+## Diversity           3.193e+00  8.422e-01   3.791 0.000152 ***
+## `Total Enrollment`  4.822e-03  4.031e-04  11.962  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 7.036 on 3322 degrees of freedom
-## Multiple R-squared:  0.5827, Adjusted R-squared:  0.582 
-## F-statistic: 927.6 on 5 and 3322 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 6.89 on 3321 degrees of freedom
+## Multiple R-squared:  0.5999, Adjusted R-squared:  0.5992 
+## F-statistic: 829.9 on 6 and 3321 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p> 
+ </p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  math_reg
+## BP = 105.37, df = 6, p-value &lt; 2.2e-16</code></pre>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-19-2.png" width="672" /></p>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  standardized_math_residuals
+## W = 0.98865, p-value = 1.116e-15</code></pre>
+<p>** Both linear models failed the homoscedasticity (constant variance) and normality assumptions for the standardized residuals. This means we cannot reliably interpret the results from either linear regression model. Next, we will try a Generalized Linear Model (GLM) with a Gamma link function. A Gamma link makes sense here because they are usually used when working with non-negative, continuous, and positive-skewed data.</p>
+<p> 
+ </p>
+</div>
+<div id="glm-english" class="section level3 hasAnchor" number="4.3.3">
+<h3><span class="header-section-number">4.3.3</span> GLM (English)<a href="results.html#glm-english" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p> 
+ 
+ 
+ </p>
+<pre><code>## 
+## Call:
+## glm(formula = `Mean Scale Score_e` ~ `% Poverty` + `% ELL` + 
+##     `% SWD` + ENI + Diversity + `Total Enrollment`, family = Gamma(link = log), 
+##     data = lm_school)
+## 
+## Deviance Residuals: 
+##       Min         1Q     Median         3Q        Max  
+## -0.048598  -0.006068  -0.000544   0.005573   0.045669  
+## 
+## Coefficients:
+##                      Estimate Std. Error  t value Pr(&gt;|t|)    
+## (Intercept)         6.436e+00  1.134e-03 5676.185  &lt; 2e-16 ***
+## `% Poverty`        -1.291e-02  2.639e-03   -4.891 1.05e-06 ***
+## `% ELL`            -1.233e-02  1.640e-03   -7.516 7.23e-14 ***
+## `% SWD`            -4.071e-02  2.895e-03  -14.063  &lt; 2e-16 ***
+## ENI                -3.344e-02  2.703e-03  -12.372  &lt; 2e-16 ***
+## Diversity           5.860e-03  1.132e-03    5.175 2.42e-07 ***
+## `Total Enrollment`  5.054e-06  5.421e-07    9.324  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for Gamma family taken to be 8.583468e-05)
+## 
+##     Null deviance: 0.84334  on 3327  degrees of freedom
+## Residual deviance: 0.28453  on 3321  degrees of freedom
+## AIC: 20864
+## 
+## Number of Fisher Scoring iterations: 3</code></pre>
+<p> 
+ </p>
+</div>
+<div id="glm-math" class="section level3 hasAnchor" number="4.3.4">
+<h3><span class="header-section-number">4.3.4</span> GLM (Math)<a href="results.html#glm-math" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p> 
+ </p>
+<pre><code>## 
+## Call:
+## glm(formula = `Mean Scale Score_m` ~ `% Poverty` + `% ELL` + 
+##     `% SWD` + ENI + Diversity + `Total Enrollment`, family = Gamma(link = log), 
+##     data = lm_school)
+## 
+## Deviance Residuals: 
+##       Min         1Q     Median         3Q        Max  
+## -0.040335  -0.007478  -0.000783   0.006741   0.049472  
+## 
+## Coefficients:
+##                      Estimate Std. Error  t value Pr(&gt;|t|)    
+## (Intercept)         6.433e+00  1.412e-03 4557.244  &lt; 2e-16 ***
+## `% Poverty`        -1.172e-02  3.286e-03   -3.567 0.000366 ***
+## `% ELL`             5.437e-03  2.042e-03    2.663 0.007788 ** 
+## `% SWD`            -4.762e-02  3.604e-03  -13.213  &lt; 2e-16 ***
+## ENI                -4.053e-02  3.365e-03  -12.044  &lt; 2e-16 ***
+## Diversity           5.382e-03  1.410e-03    3.817 0.000137 ***
+## `Total Enrollment`  8.105e-06  6.749e-07   12.010  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for Gamma family taken to be 0.0001330455)
+## 
+##     Null deviance: 1.09841  on 3327  degrees of freedom
+## Residual deviance: 0.44048  on 3321  degrees of freedom
+## AIC: 22289
+## 
+## Number of Fisher Scoring iterations: 3</code></pre>
+<p>*** Still need to find out if there are any assumptions i need to make or anything to prove before interpretations ***</p>
+<p> 
+ 
+ 
+ </p>
 
 </div>
 </div>

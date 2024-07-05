@@ -33,3 +33,10 @@ what-is-the-association-between-each-identity-that-a-student-holds
 descriptive-statistics-1
 descriptive-statistics-diversity-scores
 regression-analysis
+linear-regression-analysis
+english
+math
+linear-regression-english
+linear-regression-math-scores
+glm-english
+glm-math

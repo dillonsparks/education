@@ -12,7 +12,6 @@ rmd_files: [
   'proposal.Rmd',
   'data.Rmd',
   'results.Rmd',
-  'interactive.Rmd',
   'conclusion.Rmd',
   'Appendix.rmd'
   ]

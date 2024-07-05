@@ -177,9 +177,13 @@ remove_outliers = function(df, columns, years) {
     for (j in 1:length(columns)) {
       
       if (class(columns[j]) == "numeric") {
+        
         iqr = quantile(df |> filter(Year == years[i]) |> pull(columns[j]), 0.75) - quantile(df |> filter(Year == years[i]) |>      pull(columns[j]), 0.25)
+        
         lower = quantile(df |> filter(Year == years[i]) |> pull(columns[j]), 0.25) - 1.5*iqr
-        upper = quantile(df |> filter(Year == years[i]) |> pull(columns[j]), 0.25) - 1.5*iqr
+        
+        upper = quantile(df |> filter(Year == years[i]) |> pull(columns[j]), 0.75) + 1.5*iqr
+        
         df = df |> filter(!(Year == year & (columns[j] >= upper & columns[j] <= lower)))
       }
     }
