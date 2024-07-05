@@ -25,3 +25,9 @@ density-histogram-of-test-scores
 confidence-intervals
 analyzing-student-demographics
 descriptive-statistics
+race-at-the-citywide-level
+diversity-score
+other-demographics-at-the-citywide-level
+how-does-demographic-information-impact-student-performance
+what-is-the-association-between-each-identity-that-a-student-holds
+descriptive-statistics-1

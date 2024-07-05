@@ -23,7 +23,7 @@
 <meta name="author" content="Woomy Michel and Dillon Sparks" />
 
 
-<meta name="date" content="2024-07-03" />
+<meta name="date" content="2024-07-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,6 +52,12 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/echarts4r-4.8.0/echarts-en.min.js"></script>
+<script src="libs/echarts4r-4.8.0/ecStat.min.js"></script>
+<script src="libs/echarts4r-4.8.0/dataTool.min.js"></script>
+<script src="libs/echarts4r-binding-0.4.5/echarts4r.js"></script>
 
 
 
@@ -100,8 +106,12 @@
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="results.html"><a href="results.html#analyzing-student-demographics"><i class="fa fa-check"></i><b>4.2</b> Analyzing student demographics</a>
 <ul>
-<li class="chapter" data-level="4.2.1" data-path="results.html"><a href="results.html#regression-should-be-here"><i class="fa fa-check"></i><b>4.2.1</b> Regression should be here!!</a></li>
+<li class="chapter" data-level="4.2.1" data-path="results.html"><a href="results.html#race-at-the-citywide-level"><i class="fa fa-check"></i><b>4.2.1</b> Race at the citywide level</a></li>
+<li class="chapter" data-level="4.2.2" data-path="results.html"><a href="results.html#other-demographics-at-the-citywide-level"><i class="fa fa-check"></i><b>4.2.2</b> Other demographics at the citywide level</a></li>
+<li class="chapter" data-level="4.2.3" data-path="results.html"><a href="results.html#diversity-score"><i class="fa fa-check"></i><b>4.2.3</b> Diversity score</a></li>
+<li class="chapter" data-level="4.2.4" data-path="results.html"><a href="results.html#descriptive-statistics-1"><i class="fa fa-check"></i><b>4.2.4</b> Descriptive statistics</a></li>
 </ul></li>
+<li class="chapter" data-level="4.3" data-path="results.html"><a href="results.html#how-does-demographic-information-impact-student-performance"><i class="fa fa-check"></i><b>4.3</b> How does demographic information impact student performance</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>5</b> Interactive component</a></li>
 <li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Conclusion</a></li>
@@ -520,20 +530,1089 @@ Wilcox test p-value
 </div>
 <div id="analyzing-student-demographics" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Analyzing student demographics<a href="results.html#analyzing-student-demographics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>For the second part of our analysis, we decided to explore the demographics of NYC schools, and how students’ identities impact their success on standardized testing. We started off by trying to learn more about how disability and funding interact in each school. The data includes an “Economic Need Index” (ENI) category that is the Department of Education’s internal metric for determining for creating a student’s individual funding needs. A student’s ENI is calculated using things like their housing status, English language learner status, eligibility for public assistance, and family income. You can learn more about how ENI’s are calculated at the student and school level here: (<a href="https://data.cccnewyork.org/data/map/1371/student-economic-need-index#1371/a/5/1622/127/a/a" class="uri">https://data.cccnewyork.org/data/map/1371/student-economic-need-index#1371/a/5/1622/127/a/a</a>)</p>
-<p>We created a heatmap of each schools’ percentage of students with a disability vs their ENI</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<p>There seems to be a slight positive association between ENI and %SWD each year, as noted by the trend from dark to lighter in the region around (0.5,0.15). Furthermore, the shape of the entire cluster itself loosely shows an increase in ENI as %SWD increases. This is interesting because disability status is not one of the explicit factors in calculating a student/school’s ENI. Students with disabilities deserve any necessary accommodations that will supplement their academic experience, yet the NYC DOE doesn’t explicitly factor this into an individual student’s need for funding. One might find it interesting to look at dropout rates of disabled students vs their ENI’s if they wish to learn more.</p>
-<p>Next, we dove into the racial demographics of each district. We created a new “% POC” column in the data in order to plot race by district (which included the missing racial data group). We acknowledge the limitations of viewing race in the data as binary, which it is certainly not in real life. If one wishes to repeat this process, we would suggest potentially binning the data or creating a new “majority” categorical column that shows the leading racial demographic by percentage in a particular school/district.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<p>From these boxplots, you can see that most NYC School Districts are primarily comprised of students of color. This is important to keep in mind when we investigate the relationship between race (as we have defined it here) and standardized testing success in our next plot. There is one outlier district each year, District 31, whose percentage of students of color is below 60 (but increasing each year). Looking back at our Cleveland Dot plots, District 31 performed in the top 11 in both Math &amp; ELA every year, which is above average but not overwhelmingly great.</p>
-<p>Now, we will look at all of the different student demographics of interest and determine the relationships between them all and test scores. In both of the following parallel coordinate plots, our factors of interest are score, total enrollment, % of students with disabilities, % of English language learners, % of students living in poverty, and % of students of color. We will do this using district data, because there is too much noise in the plot if we do it by district instead. The first plot is for ELA scores, and the second is for Math.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
-<p>The biggest takeaways from this first graph is that there seems to be a negative association between the percentage of students who are English language learners and ELA test scores, there is a strong negative association between ELA test scores and the percentage of students of color, and that the percentage of students living in poverty has a slight negative correlation with the total enrollment. This first observation makes sense because taking a standardized test in a language that you are learning is an objectively difficult thing to do. The second observation is problematic when we consider our previous graph, showing that all districts are majority students of color; why is there a negative association between % of POC students and test scores in a majority POC school system?</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<p>We switched around the order of the factors for this second graph in order to see if we noticed anything new. Now, we can see a slight negative association between the percentage of students of color and total enrollment, and a strong negative association between both math scores and the percentage of students living in poverty and the percentage of English language learners and math scores.</p>
-<div id="regression-should-be-here" class="section level3 hasAnchor" number="4.2.1">
-<h3><span class="header-section-number">4.2.1</span> Regression should be here!!<a href="results.html#regression-should-be-here" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="race-at-the-citywide-level" class="section level3 hasAnchor" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Race at the citywide level<a href="results.html#race-at-the-citywide-level" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="echarts4r html-widget html-fill-item" id="htmlwidget-09dbd7f0de273a966f43" style="width:100%;height:500px;"></div>
+<script type="application/json" data-for="htmlwidget-09dbd7f0de273a966f43">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"legend":{"data":["Asian","Black","Hispanic","White","Other"],"show":true,"type":"plain","right":0,"orient":"vertical","top":50},"series":[{"name":"percentage","type":"pie","radius":["50%","70%"],"itemStyle":{"borderRadius":10,"borderColor":"#fff","borderWidth":0.5},"data":[{"value":0.1818145280637012,"name":"Asian"},{"value":0.206917340074228,"name":"Black"},{"value":0.415692310953227,"name":"Hispanic"},{"value":0.1680276595323091,"name":"White"},{"value":0.02594785378954487,"name":"Other"}]}],"toolbox":{"feature":{"restore":[],"magicType":[],"dataView":[],"saveAsImage":[]}},"tooltip":{"trigger":"axis"},"color":["#EFF3FF","#BDD7E7","#6BAED6","#3182BD","#08519C"],"title":[{"left":"center","top":5,"text":"Citywide Racial Demographics of NYC Students","subtext":"Using aggregated data from 2018, 2019, and 2022"}]},"dispose":true},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="other-demographics-at-the-citywide-level" class="section level3 hasAnchor" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Other demographics at the citywide level<a href="results.html#other-demographics-at-the-citywide-level" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="echarts4r html-widget html-fill-item" id="htmlwidget-c25f4e096f4fb6d64c7b" style="width:100%;height:500px;"></div>
+<script type="application/json" data-for="htmlwidget-c25f4e096f4fb6d64c7b">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"yAxis":[{"show":true}],"xAxis":[{"data":["2018","2019","2022"],"type":"category","boundaryGap":true}],"legend":{"data":["English language learners","Students with disabilities","Students living in poverty","Economic Need Index"],"show":true,"type":"plain","orient":"horizontal","bottom":10},"series":[{"data":[{"value":["2018","0.1537201"]},{"value":["2019","0.1490164"]},{"value":["2022","0.1626084"]}],"name":"English language learners","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp1"},{"data":[{"value":["2018","0.2008541"]},{"value":["2019","0.2052381"]},{"value":["2022","0.1986964"]}],"name":"Students with disabilities","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp2"},{"data":[{"value":["2018","0.7465891"]},{"value":["2019","0.7317927"]},{"value":["2022","0.7229357"]}],"name":"Students living in poverty","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp3"},{"data":[{"value":["2018","0.7282144"]},{"value":["2019","0.7247252"]},{"value":["2022","0.7215998"]}],"name":"Economic Need Index","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp4"}],"toolbox":{"feature":{"restore":[],"magicType":{"type":["line"]},"dataView":[],"saveAsImage":[]}},"tooltip":{"trigger":"axis"},"color":["#EFF3FF","#BDD7E7","#6BAED6","#2171B5"]},"dispose":true},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="diversity-score" class="section level3 hasAnchor" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> Diversity score<a href="results.html#diversity-score" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre><code>## [1] 0.7213053</code></pre>
+<p>(Diversity Index) [<a href="https://geographyfieldwork.com/Simpson&#39;sDiversityIndex.htm#" class="uri">https://geographyfieldwork.com/Simpson'sDiversityIndex.htm#</a>:~:text=Simpson’s%20Diversity%20Index%20is%20a,evenness%20increase%2C%20so%20diversity%20increases.&amp;text=The%20value%20of%20D%20ranges%20between%200%20and%201.]</p>
+</div>
+<div id="descriptive-statistics-1" class="section level3 hasAnchor" number="4.2.4">
+<h3><span class="header-section-number">4.2.4</span> Descriptive statistics<a href="results.html#descriptive-statistics-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table class="table table-condensed">
+<thead>
+<tr>
+<th style="text-align:right;">
+District
+</th>
+<th style="text-align:right;">
+Asian
+</th>
+<th style="text-align:right;">
+Black
+</th>
+<th style="text-align:right;">
+Hispanic
+</th>
+<th style="text-align:right;">
+White
+</th>
+<th style="text-align:right;">
+Other
+</th>
+<th style="text-align:right;">
+ELL
+</th>
+<th style="text-align:right;">
+SWD
+</th>
+<th style="text-align:right;">
+Poverty
+</th>
+<th style="text-align:right;">
+ENI
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.212</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.154</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.416</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.178</span>
+</td>
+<td style="text-align:right;">
+0.037
+</td>
+<td style="text-align:right;">
+0.084
+</td>
+<td style="text-align:right;">
+0.224
+</td>
+<td style="text-align:right;">
+0.644
+</td>
+<td style="text-align:right;">
+0.662
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.222</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.142</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.326</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.259</span>
+</td>
+<td style="text-align:right;">
+0.040
+</td>
+<td style="text-align:right;">
+0.082
+</td>
+<td style="text-align:right;">
+0.175
+</td>
+<td style="text-align:right;">
+0.536
+</td>
+<td style="text-align:right;">
+0.534
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.089</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.206</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.322</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.322</span>
+</td>
+<td style="text-align:right;">
+0.045
+</td>
+<td style="text-align:right;">
+0.047
+</td>
+<td style="text-align:right;">
+0.183
+</td>
+<td style="text-align:right;">
+0.490
+</td>
+<td style="text-align:right;">
+0.494
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.086</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.239</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.596</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.049</span>
+</td>
+<td style="text-align:right;">
+0.025
+</td>
+<td style="text-align:right;">
+0.102
+</td>
+<td style="text-align:right;">
+0.243
+</td>
+<td style="text-align:right;">
+0.816
+</td>
+<td style="text-align:right;">
+0.824
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.037</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.482</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.393</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.058</span>
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.084
+</td>
+<td style="text-align:right;">
+0.244
+</td>
+<td style="text-align:right;">
+0.819
+</td>
+<td style="text-align:right;">
+0.831
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.015</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.073</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.840</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.057</span>
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.267
+</td>
+<td style="text-align:right;">
+0.205
+</td>
+<td style="text-align:right;">
+0.843
+</td>
+<td style="text-align:right;">
+0.828
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.011</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.267</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.693</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.015</span>
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.159
+</td>
+<td style="text-align:right;">
+0.242
+</td>
+<td style="text-align:right;">
+0.920
+</td>
+<td style="text-align:right;">
+0.921
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.065</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.211</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.648</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.059</span>
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.139
+</td>
+<td style="text-align:right;">
+0.235
+</td>
+<td style="text-align:right;">
+0.832
+</td>
+<td style="text-align:right;">
+0.828
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.014</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.274</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.689</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.014</span>
+</td>
+<td style="text-align:right;">
+0.008
+</td>
+<td style="text-align:right;">
+0.225
+</td>
+<td style="text-align:right;">
+0.227
+</td>
+<td style="text-align:right;">
+0.921
+</td>
+<td style="text-align:right;">
+0.927
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.078</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.151</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.693</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.061</span>
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.206
+</td>
+<td style="text-align:right;">
+0.199
+</td>
+<td style="text-align:right;">
+0.828
+</td>
+<td style="text-align:right;">
+0.829
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.086</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.376</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.427</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.089</span>
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.118
+</td>
+<td style="text-align:right;">
+0.200
+</td>
+<td style="text-align:right;">
+0.787
+</td>
+<td style="text-align:right;">
+0.772
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.028</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.242</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.699</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.015</span>
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.205
+</td>
+<td style="text-align:right;">
+0.228
+</td>
+<td style="text-align:right;">
+0.920
+</td>
+<td style="text-align:right;">
+0.924
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.208</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.412</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.171</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.171</span>
+</td>
+<td style="text-align:right;">
+0.030
+</td>
+<td style="text-align:right;">
+0.043
+</td>
+<td style="text-align:right;">
+0.142
+</td>
+<td style="text-align:right;">
+0.639
+</td>
+<td style="text-align:right;">
+0.612
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.054</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.203</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.562</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.157</span>
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.107
+</td>
+<td style="text-align:right;">
+0.210
+</td>
+<td style="text-align:right;">
+0.723
+</td>
+<td style="text-align:right;">
+0.746
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.163</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.135</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.358</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.302</span>
+</td>
+<td style="text-align:right;">
+0.037
+</td>
+<td style="text-align:right;">
+0.143
+</td>
+<td style="text-align:right;">
+0.202
+</td>
+<td style="text-align:right;">
+0.562
+</td>
+<td style="text-align:right;">
+0.571
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.022</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.722</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.203</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.031</span>
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.051
+</td>
+<td style="text-align:right;">
+0.251
+</td>
+<td style="text-align:right;">
+0.836
+</td>
+<td style="text-align:right;">
+0.842
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.030</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.735</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.163</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.046</span>
+</td>
+<td style="text-align:right;">
+0.022
+</td>
+<td style="text-align:right;">
+0.103
+</td>
+<td style="text-align:right;">
+0.185
+</td>
+<td style="text-align:right;">
+0.799
+</td>
+<td style="text-align:right;">
+0.762
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.020</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.840</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.081</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.038</span>
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.072
+</td>
+<td style="text-align:right;">
+0.197
+</td>
+<td style="text-align:right;">
+0.769
+</td>
+<td style="text-align:right;">
+0.709
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.081</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.426</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.450</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.021</span>
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.136
+</td>
+<td style="text-align:right;">
+0.212
+</td>
+<td style="text-align:right;">
+0.874
+</td>
+<td style="text-align:right;">
+0.861
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.435</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.026</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.267</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.259</span>
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.225
+</td>
+<td style="text-align:right;">
+0.159
+</td>
+<td style="text-align:right;">
+0.762
+</td>
+<td style="text-align:right;">
+0.749
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.255</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.134</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.250</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.339</span>
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.174
+</td>
+<td style="text-align:right;">
+0.184
+</td>
+<td style="text-align:right;">
+0.724
+</td>
+<td style="text-align:right;">
+0.725
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.211</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.284</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.154</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.326</span>
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.119
+</td>
+<td style="text-align:right;">
+0.171
+</td>
+<td style="text-align:right;">
+0.696
+</td>
+<td style="text-align:right;">
+0.636
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.012</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.736</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.220</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.014</span>
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.049
+</td>
+<td style="text-align:right;">
+0.248
+</td>
+<td style="text-align:right;">
+0.899
+</td>
+<td style="text-align:right;">
+0.886
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.197</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.025</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.632</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.131</span>
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.231
+</td>
+<td style="text-align:right;">
+0.169
+</td>
+<td style="text-align:right;">
+0.762
+</td>
+<td style="text-align:right;">
+0.722
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.491</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.068</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.300</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.120</span>
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.188
+</td>
+<td style="text-align:right;">
+0.145
+</td>
+<td style="text-align:right;">
+0.690
+</td>
+<td style="text-align:right;">
+0.627
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.534</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.111</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.176</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.152</span>
+</td>
+<td style="text-align:right;">
+0.023
+</td>
+<td style="text-align:right;">
+0.082
+</td>
+<td style="text-align:right;">
+0.146
+</td>
+<td style="text-align:right;">
+0.578
+</td>
+<td style="text-align:right;">
+0.469
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.224</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.217</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.397</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.103</span>
+</td>
+<td style="text-align:right;">
+0.053
+</td>
+<td style="text-align:right;">
+0.110
+</td>
+<td style="text-align:right;">
+0.178
+</td>
+<td style="text-align:right;">
+0.759
+</td>
+<td style="text-align:right;">
+0.689
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.299</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.198</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.281</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.161</span>
+</td>
+<td style="text-align:right;">
+0.054
+</td>
+<td style="text-align:right;">
+0.106
+</td>
+<td style="text-align:right;">
+0.152
+</td>
+<td style="text-align:right;">
+0.680
+</td>
+<td style="text-align:right;">
+0.607
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.167</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.596</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.168</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.018</span>
+</td>
+<td style="text-align:right;">
+0.047
+</td>
+<td style="text-align:right;">
+0.089
+</td>
+<td style="text-align:right;">
+0.163
+</td>
+<td style="text-align:right;">
+0.729
+</td>
+<td style="text-align:right;">
+0.628
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.211</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.064</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.529</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.170</span>
+</td>
+<td style="text-align:right;">
+0.023
+</td>
+<td style="text-align:right;">
+0.172
+</td>
+<td style="text-align:right;">
+0.149
+</td>
+<td style="text-align:right;">
+0.700
+</td>
+<td style="text-align:right;">
+0.682
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.119</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.123</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.287</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.445</span>
+</td>
+<td style="text-align:right;">
+0.021
+</td>
+<td style="text-align:right;">
+0.066
+</td>
+<td style="text-align:right;">
+0.240
+</td>
+<td style="text-align:right;">
+0.578
+</td>
+<td style="text-align:right;">
+0.525
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.021</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.162</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: cornflowerblue; color: white">0.783</span>
+</td>
+<td style="text-align:right;">
+<span style="display: block; padding: 5px; border-radius: 4px; background-color: ; color: ">0.024</span>
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.207
+</td>
+<td style="text-align:right;">
+0.201
+</td>
+<td style="text-align:right;">
+0.869
+</td>
+<td style="text-align:right;">
+0.861
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="how-does-demographic-information-impact-student-performance" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> How does demographic information impact student performance<a href="results.html#how-does-demographic-information-impact-student-performance" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <pre><code>## 
 ## Call:
 ## lm(formula = `Mean Scale Score_e` ~ ., data = lm_school)
@@ -560,7 +1639,6 @@ Wilcox test p-value
 ## Multiple R-squared:  0.8851, Adjusted R-squared:  0.8848 
 ## F-statistic:  3196 on 8 and 3319 DF,  p-value: &lt; 2.2e-16</code></pre>
 
-</div>
 </div>
 </div>
             </section>

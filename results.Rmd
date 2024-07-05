@@ -1,6 +1,5 @@
 # Results
 ```{r, include=FALSE}
-library(dplyr)
 library(GGally)
 library(tidyverse)
 library(readxl)
@@ -11,6 +10,8 @@ library(ggpubr)
 library(formattable)
 library(RColorBrewer)
 library(moments)
+library(echarts4r)
+library(abdiv)
 ```
 
 
@@ -111,12 +112,12 @@ In investigating the relationship between Reading and Math scores, we started ve
 
 ```{r}
 r_v_m <- ggplot(data = school) +
-       geom_point(aes(x = school$`Mean Scale Score_e`, y = school$`Mean Scale Score_m`), color = "cornflowerblue", alpha =0.5) + 
+       geom_point(aes(x = school$`Mean Scale Score_e`, y = school$`Mean Scale Score_m`), color = "lightskyblue", alpha =0.5) + 
        xlab('Mean ELA Score') +
        ylab('Mean Math Score') +
        ggtitle('Test Scores by School') +
        facet_wrap(~Year) 
-r_v_m + geom_abline(color = "red")
+r_v_m + geom_abline(color = "navyblue")
 
 ```
 
@@ -169,7 +170,7 @@ scores = school |> select(Year, `Mean Scale Score_e`, `Mean Scale Score_m`, DBN)
   pivot_longer(cols = c("Mean Scale Score_e", "Mean Scale Score_m")) |>
   mutate(Test = case_when(name == "Mean Scale Score_e" ~ "ELA",
                    name == "Mean Scale Score_m" ~ "Math")) |>
-           select(-"name") |> 
+           dplyr::select(-"name") |> 
            rename(score = value, year = Year)
 
 
@@ -177,9 +178,11 @@ ggplot(data = scores, aes(score, fill = Test)) +
   geom_density(alpha = 0.5) + 
   facet_wrap(~year) + 
   theme_bw(14) + 
-  scale_fill_manual(values = c("ELA" = "cornflowerblue", "Math" = "red"))
+  scale_fill_manual(values = c("ELA" = "lightskyblue", "Math" = "navyblue"))
   
 ```
+
+
 
 
 Looking at our density histograms, we can see that there is a lot of overlap between scores in both subjects in this three year sample size. At first glance, it seems like student's are performing slightly better on ELA than Math.
@@ -235,74 +238,165 @@ Even when we repeat the test only looking at the year 2022 (where we noticed a b
 
 ## Analyzing student demographics
 
-
-
-For the second part of our analysis, we decided to explore the demographics of NYC schools, and how students' identities impact their success on standardized testing. We started off by trying to learn more about how disability and funding interact in each school. The data includes an "Economic Need Index" (ENI) category that is the Department of Education's internal metric for determining for creating a student's individual funding needs. A student's ENI is calculated using things like their housing status, English language learner status, eligibility for public assistance, and family income. You can learn more about how ENI's are calculated at the student and school level here: (https://data.cccnewyork.org/data/map/1371/student-economic-need-index#1371/a/5/1622/127/a/a)  
-
-We created a heatmap of each schools' percentage of students with a disability vs their ENI
+### Race at the citywide level
 
 ```{r}
-hm2 <- ggplot(school, aes(y = school$`% SWD`, x = school$`ENI`)) + 
-  geom_bin2d() +
-  labs(x = "Percentage of Students with Disabilities", y = "Economic Need Index", title = "Disability vs. Economic Need, by Year")+
-  facet_wrap("Year")
-hm2
+
+citywide = school |> 
+           mutate(Asian = `Total Enrollment`* `% Asian`,
+                  Black = `Total Enrollment`* `% Black`,
+                  Hispanic = `Total Enrollment`* `% Hispanic`,
+                  White = `Total Enrollment`* `% White`,
+                  Other = `Total Enrollment`* `% Native American` + `Total Enrollment`* `% Multi-Racial`,
+                  ELL = `Total Enrollment`* `% ELL`,
+                  SWD = `Total Enrollment`* `% SWD`,
+                  Poverty = `Total Enrollment`* `% Poverty`)|> 
+           select(Asian, Black, Hispanic, White, Other, Year, ELL, SWD, Poverty, `Total Enrollment`, ENI) |> 
+           group_by(Year) |> 
+           summarise(Asian = sum(Asian)/sum(`Total Enrollment`), 
+                     Black = sum(Black)/sum(`Total Enrollment`),
+                     Hispanic = sum(Hispanic)/sum(`Total Enrollment`),
+                     White = sum(White)/sum(`Total Enrollment`),
+                     Other = sum(Other)/sum(`Total Enrollment`),
+                     ELL = sum(ELL)/sum(`Total Enrollment`), 
+                     SWD = sum(SWD)/sum(`Total Enrollment`), 
+                     Poverty = sum(Poverty)/sum(`Total Enrollment`), 
+                     ENI = mean(ENI)) |> 
+           mutate(Year = as.factor(Year))
 ```
-
-There seems to be a slight positive association between ENI and %SWD each year, as noted by the trend from dark to lighter in the region around (0.5,0.15). Furthermore, the shape of the entire cluster itself loosely shows an increase in ENI as %SWD increases. This is interesting because disability status is not one of the explicit factors in calculating a student/school's ENI. Students with disabilities deserve any necessary accommodations that will supplement their academic experience, yet the NYC DOE doesn't explicitly factor this into an individual student's need for funding. One might find it interesting to look at dropout rates of disabled students vs their ENI's if they wish to learn more.  
-
-Next, we dove into the racial demographics of each district. We created a new "% POC" column in the data in order to plot race by district (which included the missing racial data group). We acknowledge the limitations of viewing race in the data as binary, which it is certainly not in real life. If one wishes to repeat this process, we would suggest potentially binning the data or creating a new "majority" categorical column that shows the leading racial demographic by percentage in a particular school/district. 
-
-```{r, warning=FALSE}
-district$Y <- as.character(district$Year)
-
-ggplot(district, aes(x= district$`% POC`)) +
-  geom_boxplot() +
-  ggtitle("Boxplot of % POC by District each Year") + 
-  labs(x = "Percentage of Students of Color")+
-  facet_wrap(~Y)
-``` 
-
-From these boxplots, you can see that most NYC School Districts are primarily comprised of students of color. This is important to keep in mind when we investigate the relationship between race (as we have defined it here) and standardized testing success in our next plot. There is one outlier district each year, District 31, whose percentage of students of color is below 60 (but increasing each year). Looking back at our Cleveland Dot plots, District 31 performed in the top 11 in both Math & ELA every year, which is above average but not overwhelmingly great. 
-
-
-
-```{r, include=FALSE}
-district %>% filter(Year == 2018) %>% select("% POC") %>% min() 
-district %>% filter(Year == 2019) %>% select("% POC") %>% min()
-district %>% filter(Year == 2022) %>% select("% POC") %>% min()
-
-```
-
-Now, we will look at all of the different student demographics of interest and determine the relationships between them all and test scores. In both of the following parallel coordinate plots, our factors of interest are score, total enrollment, % of students with disabilities, % of English language learners, % of students living in poverty, and % of students of color. We will do this using district data, because there is too much noise in the plot if we do it by district instead. The first plot is for ELA scores, and the second is for Math. 
-
-```{r}
-district$Y <- as.character(district$Year)
-
-ggparcoord(district, 
-           columns = c(13,14,3,19,15,5),
-           title = "Parallel Coordinate Plot for ELA Scores, grouped by Year", 
-           scale='std',
-           #groupColumn = 20,
-           splineFactor=10)
-``` 
-
-The biggest takeaways from this first graph is that there seems to be a negative association between the percentage of students who are English language learners and ELA test scores, there is a strong negative association between ELA test scores and the percentage of students of color, and that the percentage of students living in poverty has a slight negative correlation with the total enrollment. This first observation makes sense because taking a standardized test in a language that you are learning is an objectively difficult thing to do. The second observation is problematic when we consider our previous graph, showing that all districts are majority students of color; why is there a negative association between % of POC students and test scores in a majority POC school system? 
 
 
 ```{r}
-ggparcoord(district, 
-           columns = c(19,5,14,4,15,13),
-           title = "Parallel Coordinate Plot for Math Scores, grouped by Year",
-           scale='std',
-           #groupColumn = 20,
-           splineFactor=10)
+citywide_agg = school |> 
+           mutate(Asian = `Total Enrollment`* `% Asian`,
+                  Black = `Total Enrollment`* `% Black`,
+                  Hispanic = `Total Enrollment`* `% Hispanic`,
+                  White = `Total Enrollment`* `% White`,
+                  Other = `Total Enrollment`* `% Native American` + `Total Enrollment`* `% Multi-Racial`,
+                  ELL = `Total Enrollment`* `% ELL`,
+                  SWD = `Total Enrollment`* `% SWD`,
+                  Poverty = `Total Enrollment`* `% Poverty`)|> 
+           select(Asian, Black, Hispanic, White, Other, Year, ELL, SWD, Poverty, `Total Enrollment`, ENI) |> 
+           summarise(Asian = sum(Asian)/sum(`Total Enrollment`), 
+                     Black = sum(Black)/sum(`Total Enrollment`),
+                     Hispanic = sum(Hispanic)/sum(`Total Enrollment`),
+                     White = sum(White)/sum(`Total Enrollment`),
+                     Other = sum(Other)/sum(`Total Enrollment`),
+                     ELL = sum(ELL)/sum(`Total Enrollment`), 
+                     SWD = sum(SWD)/sum(`Total Enrollment`), 
+                     Poverty = sum(Poverty)/sum(`Total Enrollment`), 
+                     ENI = mean(ENI))
+
+citywide_donut = citywide_agg |> 
+           select(c("Asian", "Black", "Hispanic", "White", "Other")) |> 
+           data.table::transpose()
+
+rownames(citywide_donut) = colnames(citywide)[2:6]
+
+citywide_donut = citywide_donut |> 
+  rownames_to_column("race") |> 
+  rename(percentage = "V1")
+
+citywide_donut |> 
+  e_charts(race) |> 
+  e_pie(percentage, radius = c("50%", "70%"), itemStyle = list(borderRadius = 10, borderColor = '#fff', borderWidth = 0.5)) |> 
+  e_toolbox_feature(feature = "restore") |> 
+  e_toolbox_feature(feature = "magicType") |> 
+  e_toolbox_feature("dataView") |> 
+  e_toolbox_feature("saveAsImage") |> 
+  e_tooltip(trigger = "axis") |> 
+  e_legend(right = 0, 
+           orient = "vertical",
+           top = 50) |> 
+  e_color(color = brewer.pal(n = 5, name = "Blues")) |> 
+  e_title(text = "Citywide Racial Demographics of NYC Students", subtext = "Using aggregated data from 2018, 2019, and 2022", left = "center", top = 5)
+  
 ```
 
-We switched around the order of the factors for this second graph in order to see if we noticed anything new. Now, we can see a slight negative association between the percentage of students of color and total enrollment, and a strong negative association between both math scores and the percentage of students living in poverty and the percentage of English language learners and math scores.  
 
 
-### Regression should be here!!
+### Other demographics at the citywide level
+
+```{r}
+citywide |> 
+    e_charts(Year) |> 
+    e_bar(ELL, name = "English language learners", stack = "grp1") |> 
+    e_bar(SWD, name = "Students with disabilities", stack = "grp2") |> 
+    e_bar(Poverty, name = "Students living in poverty", stack = "grp3") |> 
+    e_bar(ENI, name = "Economic Need Index", stack = "grp4") |> 
+    e_toolbox_feature(feature = "restore") |> 
+    e_toolbox_feature(feature = "magicType", type = list("line")) |> 
+    e_toolbox_feature("dataView") |> 
+    e_toolbox_feature("saveAsImage") |> 
+    e_tooltip(trigger = "axis") |> 
+    e_legend(orient = "horizontal",
+           bottom = 10) |> 
+    e_color(color = brewer.pal(n = 4, name = "Blues"))
+```
+
+
+
+### Diversity score
+```{r}
+test_simpson = citywide |> filter(Year == "2018") |> select (-c("Year")) |> select(c("Asian", "Black", "Hispanic", "White", "Other"))
+simpson(test_simpson)
+```
+
+(Diversity Index) [https://geographyfieldwork.com/Simpson'sDiversityIndex.htm#:~:text=Simpson's%20Diversity%20Index%20is%20a,evenness%20increase%2C%20so%20diversity%20increases.&text=The%20value%20of%20D%20ranges%20between%200%20and%201.]
+
+
+### Descriptive statistics
+
+```{r}
+district_agg = district |> 
+               mutate(Asian = `Total Enrollment`* `% Asian`,
+                  Black = `Total Enrollment`* `% Black`,
+                  Hispanic = `Total Enrollment`* `% Hispanic`,
+                  White = `Total Enrollment`* `% White`,
+                  Other = `Total Enrollment`* `% Native American` + `Total Enrollment`* `% Multi-Racial`,
+                  ELL = `Total Enrollment`* `% ELL`,
+                  SWD = `Total Enrollment`* `% SWD`,
+                  Poverty = `Total Enrollment`* `% Poverty`)|> 
+           select(District, Asian, Black, Hispanic, White, Other, ELL, SWD, Poverty, `Total Enrollment`, ENI) |> 
+           group_by(District) |> 
+           summarise(Asian = sum(Asian)/sum(`Total Enrollment`), 
+                     Black = sum(Black)/sum(`Total Enrollment`),
+                     Hispanic = sum(Hispanic)/sum(`Total Enrollment`),
+                     White = sum(White)/sum(`Total Enrollment`),
+                     Other = sum(Other)/sum(`Total Enrollment`),
+                     ELL = sum(ELL)/sum(`Total Enrollment`), 
+                     SWD = sum(SWD)/sum(`Total Enrollment`), 
+                     Poverty = sum(Poverty)/sum(`Total Enrollment`), 
+                     ENI = mean(ENI)) |> 
+            mutate_all(funs(round(., digits = 3)))
+
+
+
+race_formatter <- formatter("span",
+                            style = x ~ style(
+                              display = "block",
+                              padding = "5px",
+                              `border-radius` = "4px",
+                              `background-color` = ifelse(x >= 0.5, "cornflowerblue", ""),
+                              color = ifelse(x >= 0.5, "white", "")
+                            ))
+
+
+
+formattable(district_agg, list(
+  Black = race_formatter,
+  Asian = race_formatter, 
+  Hispanic = race_formatter,
+  White = race_formatter
+))
+```
+
+
+
+
+
+## How does demographic information impact student performance
+
 ```{r}
 lm_school = school |> select(c(`Mean Scale Score_e`, `Mean Scale Score_m`, `% Asian`, `% Poverty`, `% ELL`, `% SWD`, `% White`, `% Black`, `% Hispanic`))
 reg = lm(`Mean Scale Score_e` ~ ., data = lm_school)
