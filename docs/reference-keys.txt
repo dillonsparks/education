@@ -40,3 +40,4 @@ linear-regression-english
 linear-regression-math-scores
 glm-english
 glm-math
+main-takeaways

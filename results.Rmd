@@ -1,4 +1,5 @@
 # Results
+
 ```{r, include=FALSE}
 library(GGally)
 library(tidyverse)
@@ -16,21 +17,18 @@ library(lmtest)
 library(bestglm)
 ```
 
-
 ```{r, include=FALSE}
 school <- read_csv("../School.csv")
 district <- read_csv("../District.csv")
 ```
 
+## Analyzing standardized test scores
 
-## Analyzing standardized test scores 
+In order to investigate the larger question of how student demographics impact test scores, we need to take analyze the test scores themselves.
 
 ### Descriptive Statistics
 
-
-&nbsp;
-&nbsp;
-
+First, we'll start off by looking at a few descriptive statistics to see what they tell us about the Math and ELA test scores. The tables below contain basic descriptive statistics for each exam over the years. Each data point, i.e. test score, represents the mean score from grades 3-8 in the respective exam.
 
 ```{r}
 
@@ -111,45 +109,52 @@ desc_stats = c("min", "max", "mean", "sd", "var","kurtosis", "skewness", "Shapir
 test_years = c("2018", "2019", "2022")
 
 formattable(get_stat_matrix(school, test_years, desc_stats, "Math"))
+
+```
+
+Here are a few notes about this table:
+
+-   The p-value for our Shapiro-Wilk normality test is 0 each year. This means the distribution of test scores is not normal in any year, and we must keep this in mind for any analyses/visualizations done with this data.
+
+-   2022 was an interesting year because    
+
+```{r}
 formattable(get_stat_matrix(school, test_years, desc_stats, "ELA"))
 ```
-&nbsp;
-&nbsp;
-
 
 ### Reading vs. Math Scatterplot
-In investigating the relationship between Reading and Math scores, we started very broad by asking ourselves if there is a correlation between success on Math & success on ELA. We chose to break this down at the school level, because there is a lot more data for us to work with. 
 
-&nbsp;
-&nbsp;
+In investigating the relationship between Reading and Math scores, we started very broad by asking ourselves: <b> is there a correlation between success on Math & success on ELA? </b> We chose to break this down at the school level, because there is more data for us to work with compared to scores at the district level.
+
+   
 
 ```{r}
 r_v_m <- ggplot(data = school) +
        geom_point(aes(x = school$`Mean Scale Score_e`, y = school$`Mean Scale Score_m`), color = "lightskyblue", alpha =0.5) + 
        xlab('Mean ELA Score') +
        ylab('Mean Math Score') +
-       ggtitle('Test Scores by School') +
-       facet_wrap(~Year) 
+       labs(title = 'Reading vs Math Scores by School', subtitle = "Faceted by Year") +
+       facet_wrap(~Year) + 
+       theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
 r_v_m + geom_abline(color = "navyblue")
 
 ```
-&nbsp;
-&nbsp;
 
-The graphs above are three scatterplots of reading vs math test scores, separated based on the year the test was taken. The two main takeaways here are that there seems to be a strong positive correlation between reading and math scores in all three years, as one might expect. In other words, schools that performed well in math usually did well on reading too, and vice-versa. There were a few outliers each year, where some schools did noticeably better on math than on reading. There were also a few, less noticeable, schools who performed slightly better on ELA than on math.  
+   
 
-&nbsp;
-&nbsp;
+The graphs above are three scatterplots of reading vs math test scores, separated based on the year the test was taken. The first main takeaway here is that there seems to be a strong positive correlation between reading and math scores in all three years, as one might expect. In other words, schools that performed well in math usually did well on reading too, and vice-versa. There were a few outliers each year, where some schools did noticeably better on math than on reading. There were also a few, less noticeable, schools who performed slightly better on ELA than on math.
+
+The second big takeaway from these scatterplots is that math scores were noticeably lower in 2022 than in years prior. There is also more variance in scores in 2022, which is demonstrated by higher variance of our scatterplot than in the other two years. We can likely attribute this to the onset of the Covid-19 global pandemic, which abruptly forced students to adapt to online learning for anywhere between six months to an entire school year.
+
+   
 
 ### Correlation Analysis
 
-Let's find the correlation between the Math and ELA scores to gain more insight on them analytically: 
+Now that we have examined the linear relationship between Math and ELA scores graphically, let's see if we can find any more information by doing so analytically. 
 
-Since the Math and ELA scores are not normally distributed in any year we will use the Spearman's correlation to examine the strength of the linear relationship between scores in each year. The data meets the assumptions for calculating Spearman's correlation coefficient because test scores each year are on an interval scale, they represent paired observations, and they have a monotonic relationship (as shown above). This is what we get: 
+We will use the Spearman's correlation to examine the strength of the linear relationship between scores in each year since they are not normally distributed. The data meets the assumptions for calculating Spearman's correlation coefficient because test scores each year are on an interval scale, they represent paired observations, and they have a monotonic relationship (as shown above). This is what we get:
 
-
-&nbsp;
-&nbsp;
+   
 
 ```{r, echo = FALSE, warning=FALSE}
 get_spearman_corr = function(df, year) {
@@ -175,29 +180,19 @@ formattable(get_corr_matrix(school, c("2018", "2019", "2022")))
 
 ```
 
+   
 
-&nbsp;
-&nbsp;
+Looking at this table, we can see that the linear relationship between scores on the two exams is fairly strong, as expected. Furthermore, the correlation coefficient was slightly lower in 2022 as we saw from our scatterplot. Generally speaking, we know that a relatively high achieveing Math school also did well on ELA (and vice-versa). However, this leads us to wonder <b> is there a difference between Math and ELA scores over the years?</b>
 
-The second big takeaway from these scatterplots is that math scores were much lower in 2022 than in years prior. There is also more variance in scores in 2022, which is demonstrated by the relatively lower correlation coefficient and the higher variance of our scatterplot than in the other two years. We can likely attribute this to the onset of the Covid-19 global pandemic, which abruptly forced students to adapt to online learning for anywhere between six months to an entire school year.
-
-Let's look at the spread of the scores during these years: 
-
-Looking at this table we can confirm that the variance was higher for Math & ELA in 2022. 
-
-
-&nbsp;
-&nbsp;
+   
 
 ### Density Histogram of Test Scores
 
-&nbsp;
-&nbsp;
+   
 
-Now that we've investigated the relationship between success on both exams, we want to know which exam students actually performed better on, over the years. Again, we are looking at this data on the school level because there is more data to work with. 
+Again, we will start with a visualization to investigate the question of which exam students actually performed better on, over the years. Again, we are looking at this data on the school level because there is more data to work with, and thus, more nuance to be uncovered.
 
-&nbsp;
-&nbsp;
+   
 
 ```{r}
 scores = school |> select(Year, `Mean Scale Score_e`, `Mean Scale Score_m`, DBN) |>
@@ -216,26 +211,19 @@ ggplot(data = scores, aes(score, fill = Test)) +
   
 ```
 
+   
 
-&nbsp;
-&nbsp;
+Looking at our density histograms, we can see that there is a lot of overlap between scores in both subjects in this three year sample size. At first glance, the relatively higher concentration of ELA scores from 600 onwards suggests that student's performed slightly better on ELA than Math each year. This is particularly true in 2022 where scores on the exams are most distinguishable. 
 
-Looking at our density histograms, we can see that there is a lot of overlap between scores in both subjects in this three year sample size. At first glance, it seems like student's are performing slightly better on ELA than Math.
-
-&nbsp;
-&nbsp;
+   
 
 ### Confidence Intervals
 
+   
 
-&nbsp;
-&nbsp;
+In order to test the significance of the difference in test scores, we can utilize the Wilcox Test to estimate the difference . We cannot use the traditional paired t-test because our data is not normal. Our null-hypothesis is that the two sample means are equal (or that the test scores for ELA and Math are the same).
 
-In order to test the significance of the difference in test scores, we can utilize the t-test. Our null-hypothesis is that the two sample means are equal (or that the test scores are the same).
-
-
-&nbsp;
-&nbsp;
+   
 
 ```{r echo=FALSE}
 get_wilcox_test = function(year, df) {
@@ -244,7 +232,7 @@ get_wilcox_test = function(year, df) {
   test = wilcox.test(x,
        y, 
        conf.int = TRUE, 
-       conf_level = 0.95, 
+       conf_level = 0.99, 
        paired = TRUE,
        mu = 0)
   return(test)
@@ -274,25 +262,23 @@ get_conf_int_table = function(df) {
 get_conf_int_table(scores)
 ```
 
-&nbsp;
-&nbsp;
+   
 
-Looking at the result of our t-test, we cannot reject the null hypothesis that our two sample means are the same, even at the 1% level of significance! Therefore, there is no evidence of a significant difference between math & reading scores during the three year period that our data comes from.  
+Looking at the result of our test for each year (<b> p = 0 < 0.01 </b>), we can reject the null hypothesis that our two sample means are the same, even at the 1% level of significance! Therefore, we have evidence of a statistically significant difference between the median Math & ELA scores in each year observed. It is notable that the 99% confidence interval, (-2.671, -2.384), is the same for each year. Thus, we are 99% confident that the true median difference between Math and ELA scores is between (-2.671, -2.384). 
 
-Even when we repeat the test only looking at the year 2022 (where we noticed a bigger difference than years prior in our density histogram), there is still not enough evidence to reject the null hypothesis that the two sample means are the same, once again at the 1% level of significance. 
+### Main Takeaways
 
-&nbsp;
-&nbsp;
+In summary, we know schools that performed relatively well on one exam were also successful on the other. Furthermore, there is evidence that students performed about 3 points better on ELA than Math, each year. 
+
+   
 
 ## Analyzing student demographics
 
-&nbsp;
-&nbsp;
+   
 
 ### Race at the citywide level
 
-&nbsp;
-&nbsp;
+   
 
 ```{r}
 
@@ -318,7 +304,6 @@ citywide = school |>
                      ENI = mean(ENI)) |> 
            mutate(Year = as.factor(Year))
 ```
-
 
 ```{r}
 citywide_agg = school |> 
@@ -367,15 +352,11 @@ citywide_donut |>
   
 ```
 
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
+       
 
 ### Other demographics at the citywide level
 
-&nbsp;
-&nbsp;
+   
 
 ```{r}
 citywide |> 
@@ -394,19 +375,13 @@ citywide |>
     e_color(color = brewer.pal(n = 4, name = "Blues"))
 ```
 
-
-&nbsp;
-&nbsp;
-
-
+   
 
 ### Descriptive statistics & Diversity scores
 
-&nbsp;
-&nbsp;
+   
 
-((Diversity Index) [https://geographyfieldwork.com/Simpson'sDiversityIndex.htm#:~:text=Simpson's%20Diversity%20Index%20is%20a,evenness%20increase%2C%20so%20diversity%20increases.&text=The%20value%20of%20D%20ranges%20between%200%20and%201.]
-)
+((Diversity Index) [[https://geographyfieldwork.com/Simpson'sDiversityIndex.htm#](https://geographyfieldwork.com/Simpson'sDiversityIndex.htm#){.uri}:\~:text=Simpson's%20Diversity%20Index%20is%20a,evenness%20increase%2C%20so%20diversity%20increases.&text=The%20value%20of%20D%20ranges%20between%200%20and%201.] )
 
 ```{r}
 
@@ -500,17 +475,13 @@ formattable(district_agg, formatters_list)
 
 ```
 
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
+       
 
 ## Regression Analysis
 
-&nbsp;
-&nbsp;
+   
 
-Need to explain which variables I am getting rid of and justify them 
+Need to explain which variables I am getting rid of and justify them
 
 ```{r}
 school$Diversity = apply(school[,c("% Asian", "% Black", "% Hispanic", "% White", "% Multi-Racial", "% Native American", "% Missing Race/Ethnicity Data")], 1, simpson)
@@ -518,21 +489,18 @@ school$Diversity = apply(school[,c("% Asian", "% Black", "% Hispanic", "% White"
 lm_school = school |> select(c(`Mean Scale Score_e`, `Mean Scale Score_m`, `% Poverty`, `% ELL`, `% SWD`, `ENI`, `Diversity`, `Total Enrollment`))
 ```
 
-&nbsp;
-&nbsp;
+   
 
 ### Linear Regression (English)
 
-&nbsp;
-&nbsp;
+   
 
 ```{r}
 english_reg = lm(`Mean Scale Score_e` ~ `% Poverty` + `% ELL` + `% SWD` + `ENI` + `Diversity` + `Total Enrollment`, data = lm_school)
 summary(english_reg)
 ```
 
-&nbsp;
-&nbsp;
+   
 
 ```{r}
 
@@ -560,23 +528,18 @@ shapiro.test(standardized_eng_residuals)
 
 ```
 
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
+       
 
 ### Linear Regression (Math scores)
 
-&nbsp;
-&nbsp;
+   
 
 ```{r}
 math_reg = lm(`Mean Scale Score_m` ~ `% Poverty` + `% ELL` + `% SWD` + `ENI` + `Diversity` + `Total Enrollment`, data = lm_school)
 summary(math_reg)
 ```
 
-&nbsp;
-&nbsp;
+   
 
 ```{r}
 standardized_math_residuals <- rstandard(math_reg)
@@ -601,18 +564,13 @@ shapiro.test(standardized_math_residuals)
 
 ```
 
+\*\* Both linear models failed the homoscedasticity (constant variance) and normality assumptions for the standardized residuals. This means we cannot reliably interpret the results from either linear regression model. Next, we will try a Generalized Linear Model (GLM) with a Gamma link function. A Gamma link makes sense here because they are usually used when working with non-negative, continuous, and positive-skewed data.
 
-** Both linear models failed the homoscedasticity (constant variance) and normality assumptions for the standardized residuals. This means we cannot reliably interpret the results from either linear regression model. Next, we will try a Generalized Linear Model (GLM) with a Gamma link function. A Gamma link makes sense here because they are usually used when working with non-negative, continuous, and positive-skewed data. 
-
-&nbsp;
-&nbsp;
+   
 
 ### GLM (English)
 
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
+       
 
 ```{r}
 glm_eng = glm(`Mean Scale Score_e` ~ `% Poverty` + `% ELL` + `% SWD` + `ENI` + `Diversity` + `Total Enrollment`,  family = "Gamma"(link = log), data = lm_school)
@@ -620,15 +578,11 @@ glm_eng = glm(`Mean Scale Score_e` ~ `% Poverty` + `% ELL` + `% SWD` + `ENI` + `
 summary(glm_eng)
 ```
 
-&nbsp;
-&nbsp;
-
+   
 
 ### GLM (Math)
 
-&nbsp;
-&nbsp;
-
+   
 
 ```{r}
 glm_math = glm(`Mean Scale Score_m` ~ `% Poverty` + `% ELL` + `% SWD` + `ENI` + `Diversity` + `Total Enrollment`,  family = "Gamma"(link = log), data = lm_school)
@@ -636,19 +590,6 @@ glm_math = glm(`Mean Scale Score_m` ~ `% Poverty` + `% ELL` + `% SWD` + `ENI` + 
 summary(glm_math)
 ```
 
-*** Still need to find out if there are any assumptions i need to make or anything to prove before interpretations ***
+\*\*\* Still need to find out if there are any assumptions i need to make or anything to prove before interpretations \*\*\*
 
-
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
-
-
-
-
-
-
-
-
-
+       
