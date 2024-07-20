@@ -291,11 +291,12 @@ In summary, we know schools that performed relatively well on one exam were also
 
 ## Analyzing student demographics
 
-Let's analyze the student demographic data now that we have a clear understanding of standardized test scores. As a reminder, we are only focused on students from grades 3-8. 
+Let's analyze the student demographic data now that we have a clear understanding of test scores. As a reminder, we are only focused on students from grades 3-8. 
    
 
 ### Race at the citywide level
 
+We will start off with a big picture look at student demographics at the citywide level. NYC is often referred to coloquially as a "melting pot" due to its rich history of cultural, racial, and ethnic diversity. 
    
 
 ```{r}
@@ -369,6 +370,9 @@ citywide_donut |>
   e_title(text = "Citywide Racial Demographics of NYC Students", subtext = "Using aggregated data from 2018, 2019, and 2022", left = "center", top = 5)
   
 ```
+
+
+As we examine this donut chart, we can quickly see that the NYC student demographics reflect this nickname. 
 
        
 
