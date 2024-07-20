@@ -23,7 +23,7 @@
 <meta name="author" content="Woomy Michel and Dillon Sparks" />
 
 
-<meta name="date" content="2024-07-18" />
+<meta name="date" content="2024-07-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -150,278 +150,121 @@
 <p>In order to investigate the larger question of how student demographics impact test scores, we need to take analyze the test scores themselves.</p>
 <div id="descriptive-statistics" class="section level3 hasAnchor" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Descriptive Statistics<a href="results.html#descriptive-statistics" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>First, we’ll start off by looking at a few descriptive statistics to see what they tell us about the Math and ELA test scores. The tables below contain basic descriptive statistics for each exam over the years. Each data point, i.e. test score, represents the mean score from grades 3-8 in the respective exam.</p>
-<table class="table table-condensed">
+<p>First, we’ll start off by looking at a few descriptive statistics to see what they tell us about the Math and ELA test scores. The tables below contain basic descriptive statistics for each exam over the years. Each data point is the mean test score at a given school from grades 3-8 for the respective exam.</p>
+<table>
+<caption><span id="tab:unnamed-chunk-6">Table 4.1: </span>Descriptive Statistics for Math Scores by Year</caption>
 <thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-2018
-</th>
-<th style="text-align:right;">
-2019
-</th>
-<th style="text-align:right;">
-2022
-</th>
+<tr class="header">
+<th align="left"></th>
+<th align="right">2018</th>
+<th align="right">2019</th>
+<th align="right">2022</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-min
-</td>
-<td style="text-align:right;">
-577.72
-</td>
-<td style="text-align:right;">
-571.50
-</td>
-<td style="text-align:right;">
-572.00
-</td>
+<tr class="odd">
+<td align="left">min</td>
+<td align="right">577.72</td>
+<td align="right">571.50</td>
+<td align="right">572.00</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-max
-</td>
-<td style="text-align:right;">
-635.59
-</td>
-<td style="text-align:right;">
-634.35
-</td>
-<td style="text-align:right;">
-629.95
-</td>
+<tr class="even">
+<td align="left">max</td>
+<td align="right">635.59</td>
+<td align="right">634.35</td>
+<td align="right">629.95</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-mean
-</td>
-<td style="text-align:right;">
-598.46
-</td>
-<td style="text-align:right;">
-599.27
-</td>
-<td style="text-align:right;">
-594.48
-</td>
+<tr class="odd">
+<td align="left">median</td>
+<td align="right">596.30</td>
+<td align="right">597.82</td>
+<td align="right">592.87</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-sd
-</td>
-<td style="text-align:right;">
-10.47
-</td>
-<td style="text-align:right;">
-10.34
-</td>
-<td style="text-align:right;">
-11.20
-</td>
+<tr class="even">
+<td align="left">var</td>
+<td align="right">109.72</td>
+<td align="right">106.93</td>
+<td align="right">125.50</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-var
-</td>
-<td style="text-align:right;">
-109.72
-</td>
-<td style="text-align:right;">
-106.93
-</td>
-<td style="text-align:right;">
-125.50
-</td>
+<tr class="odd">
+<td align="left">skewness</td>
+<td align="right">0.62</td>
+<td align="right">0.52</td>
+<td align="right">0.50</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-kurtosis
-</td>
-<td style="text-align:right;">
-2.87
-</td>
-<td style="text-align:right;">
-2.79
-</td>
-<td style="text-align:right;">
-2.64
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-skewness
-</td>
-<td style="text-align:right;">
-0.62
-</td>
-<td style="text-align:right;">
-0.52
-</td>
-<td style="text-align:right;">
-0.50
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Shapiro-Wilk p value
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.00
-</td>
+<tr class="even">
+<td align="left">Shapiro-Wilk p value</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
 </tr>
 </tbody>
 </table>
 <p>Here are a few notes about this table:</p>
 <ul>
-<li><p>The p-value for our Shapiro-Wilk normality test is 0 each year. This means the distribution of test scores is not normal in any year, and we must keep this in mind for any analyses/visualizations done with this data.</p></li>
-<li><p>2022 was an interesting year because    </p></li>
+<li><p>The p-value for our Shapiro-Wilk normality test is approximately 0 each year. This means that we have significant evidence to reject the null-hypothesis that our data is normally distributed. Since our scores are not normal in any year, we must keep this in mind for any analyses/visualizations done with this data.</p></li>
+<li><p>2022 was an interesting year because it had the lowest max and median, yet it still had the highest variance. This might suggest that scores were lower than previous years, yet more spread out. The skewness was also lowest closest to 0 in 2022, which suggests our scores were more symmetrical than in previous years.</p></li>
+<li><p>Skewness values above 0.5 in 2018 and 2019 means the data was slightly positively skewed in those years. In other words, the scores were slightly more concentrated at the higher end of the scale in these years.</p></li>
 </ul>
-<table class="table table-condensed">
+<table>
+<caption><span id="tab:unnamed-chunk-7">Table 4.2: </span>Descriptive Statistics for ELA Scores by Year</caption>
 <thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-2018
-</th>
-<th style="text-align:right;">
-2019
-</th>
-<th style="text-align:right;">
-2022
-</th>
+<tr class="header">
+<th align="left"></th>
+<th align="right">2018</th>
+<th align="right">2019</th>
+<th align="right">2022</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-min
-</td>
-<td style="text-align:right;">
-570.58
-</td>
-<td style="text-align:right;">
-559.30
-</td>
-<td style="text-align:right;">
-570.30
-</td>
+<tr class="odd">
+<td align="left">min</td>
+<td align="right">570.58</td>
+<td align="right">559.30</td>
+<td align="right">570.30</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-max
-</td>
-<td style="text-align:right;">
-631.72
-</td>
-<td style="text-align:right;">
-634.06
-</td>
-<td style="text-align:right;">
-630.56
-</td>
+<tr class="even">
+<td align="left">max</td>
+<td align="right">631.72</td>
+<td align="right">634.06</td>
+<td align="right">630.56</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-mean
-</td>
-<td style="text-align:right;">
-600.51
-</td>
-<td style="text-align:right;">
-599.59
-</td>
-<td style="text-align:right;">
-599.93
-</td>
+<tr class="odd">
+<td align="left">median</td>
+<td align="right">598.87</td>
+<td align="right">598.15</td>
+<td align="right">599.02</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-sd
-</td>
-<td style="text-align:right;">
-9.43
-</td>
-<td style="text-align:right;">
-9.59
-</td>
-<td style="text-align:right;">
-9.68
-</td>
+<tr class="even">
+<td align="left">var</td>
+<td align="right">88.99</td>
+<td align="right">91.94</td>
+<td align="right">93.77</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-var
-</td>
-<td style="text-align:right;">
-88.99
-</td>
-<td style="text-align:right;">
-91.94
-</td>
-<td style="text-align:right;">
-93.77
-</td>
+<tr class="odd">
+<td align="left">skewness</td>
+<td align="right">0.57</td>
+<td align="right">0.49</td>
+<td align="right">0.36</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-kurtosis
-</td>
-<td style="text-align:right;">
-3.04
-</td>
-<td style="text-align:right;">
-3.38
-</td>
-<td style="text-align:right;">
-2.73
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-skewness
-</td>
-<td style="text-align:right;">
-0.57
-</td>
-<td style="text-align:right;">
-0.49
-</td>
-<td style="text-align:right;">
-0.36
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Shapiro-Wilk p value
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.00
-</td>
+<tr class="even">
+<td align="left">Shapiro-Wilk p value</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
 </tr>
 </tbody>
 </table>
+<p>Looking at the table for our ELA scores, here are a few more takeaways:</p>
+<ul>
+<li>Again, p-value for our Shapiro-Wilk normality test is approximately 0 each year. This means our ELA scores are also not normal in any year.</li>
+<li>The data follows a similar trend to Math scores in that 2022 had the highest variance and lowest skew of the years observed.</li>
+<li>The variances among ELA scores was comparatively lower than the corresponding variances for Math scores each year, though they followed similar trends over the years. The same is true for skewness. This means the scores for ELA were relatively less spread out and more symmetrical.</li>
+</ul>
 </div>
 <div id="reading-vs.-math-scatterplot" class="section level3 hasAnchor" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Reading vs. Math Scatterplot<a href="results.html#reading-vs.-math-scatterplot" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>In investigating the relationship between Reading and Math scores, we started very broad by asking ourselves: <b> is there a correlation between success on Math &amp; success on ELA? </b> We chose to break this down at the school level, because there is more data for us to work with compared to scores at the district level.</p>
+<p>In investigating the relationship between Reading and Math scores, we started with the big picture question: <b> is there a correlation between success on Math &amp; success on ELA? </b> We chose to break this down at the school level, because there is more data for us to work with compared to scores at the district level.</p>
 <p>   </p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p>   </p>
@@ -468,7 +311,7 @@ Spearman correlation coefficient
 </tbody>
 </table>
 <p>   </p>
-<p>Looking at this table, we can see that the linear relationship between scores on the two exams is fairly strong, as expected. Furthermore, the correlation coefficient was slightly lower in 2022 as we saw from our scatterplot. Generally speaking, we know that a relatively high achieveing Math school also did well on ELA (and vice-versa). However, this leads us to wonder <b> is there a difference between Math and ELA scores over the years?</b></p>
+<p>Looking at this table, we can see that the linear relationship between scores on the two exams is fairly strong, as expected. Furthermore, the correlation coefficient was slightly lower in 2022 as we saw from our scatterplot. Generally speaking, we know that a relatively high achieving Math school also did well on ELA (and vice-versa). However, this leads us to wonder <b> is there a difference between Math and ELA scores over the years?</b></p>
 <p>   </p>
 </div>
 <div id="density-histogram-of-test-scores" class="section level3 hasAnchor" number="4.1.4">
@@ -484,7 +327,7 @@ Spearman correlation coefficient
 <div id="confidence-intervals" class="section level3 hasAnchor" number="4.1.5">
 <h3><span class="header-section-number">4.1.5</span> Confidence Intervals<a href="results.html#confidence-intervals" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>   </p>
-<p>In order to test the significance of the difference in test scores, we can utilize the Wilcox Test to estimate the difference . We cannot use the traditional paired t-test because our data is not normal. Our null-hypothesis is that the two sample means are equal (or that the test scores for ELA and Math are the same).</p>
+<p>We can utilize the Wilcox Test to estimate the difference between median Math and ELA scores and determine the significance of said difference. We cannot use the traditional paired t-test because our data is not normal. The following table contains a 99% confidence interval for the difference between median scores in each year, in addition to the p-value for the corresponding test. Our null-hypothesis is that the two sample means are equal (or that the test scores for ELA and Math are the same).</p>
 <p>   </p>
 <table class="table table-condensed">
 <thead>
@@ -508,10 +351,10 @@ Wilcox test p-value
 2018
 </td>
 <td style="text-align:right;">
--2.671
+-2.33
 </td>
 <td style="text-align:right;">
--2.384
+-1.94
 </td>
 <td style="text-align:right;">
 0
@@ -522,10 +365,10 @@ Wilcox test p-value
 2019
 </td>
 <td style="text-align:right;">
--2.671
+-0.58
 </td>
 <td style="text-align:right;">
--2.384
+-0.18
 </td>
 <td style="text-align:right;">
 0
@@ -536,10 +379,10 @@ Wilcox test p-value
 2022
 </td>
 <td style="text-align:right;">
--2.671
+-5.67
 </td>
 <td style="text-align:right;">
--2.384
+-5.16
 </td>
 <td style="text-align:right;">
 0
@@ -548,29 +391,31 @@ Wilcox test p-value
 </tbody>
 </table>
 <p>   </p>
-<p>Looking at the result of our test for each year (<b> p = 0 &lt; 0.01 </b>), we can reject the null hypothesis that our two sample means are the same, even at the 1% level of significance! Therefore, we have evidence of a statistically significant difference between the median Math &amp; ELA scores in each year observed. It is notable that the 99% confidence interval, (-2.671, -2.384), is the same for each year. Thus, we are 99% confident that the true median difference between Math and ELA scores is between (-2.671, -2.384).</p>
+<p>Looking at the result of our test for each year reveals: <span class="math display">\[p \approx 0 &lt; 0.01\]</span> Thus, we can reject the null hypothesis that our two sample means are the same, even at the 1% level of significance! Therefore, we have evidence of a statistically significant difference between the median Math &amp; ELA scores in each year observed.</p>
+<p>It is notable that the 99% confidence interval for 2022, (-5.67, -5.16), is much larger than other years. This means we are 99% confident that the true median difference between Math and ELA scores at a given school in 2022 is between -5.67 and -5.16. In the context of standardized testing, this difference in scores is relatively small each year– however, it is important for our analyses that Math scores are consistently lower than ELA scores, and that this difference is statistically significant each year despite the negligible difference in some years.</p>
 </div>
 <div id="main-takeaways" class="section level3 hasAnchor" number="4.1.6">
 <h3><span class="header-section-number">4.1.6</span> Main Takeaways<a href="results.html#main-takeaways" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>In summary, we know schools that performed relatively well on one exam were also successful on the other. Furthermore, there is evidence that students performed about 3 points better on ELA than Math, each year.</p>
+<p>In summary, we know schools that performed relatively well on one exam were also successful on the other. This conclusion is fairly intuitive, though it was still important to analyze the data before assuming so. Furthermore, there is evidence to suggest schools performed better on ELA than Math each year, though this difference was quite small in some years. This is interesting because the linear relationship between scores is very strong, yet there is still a statistically significant difference between scores. Lastly, every test, table, and visualization revealed that 2022 was a fairly odd year. This is likely related to the break from standardized testing due to the onset of the Covid-19 global pandemic. The virus’s impact on education will be seen for many years to come and extends far beyond the analysis of standardized test scores done as part of this project.</p>
 <p>   </p>
 </div>
 </div>
 <div id="analyzing-student-demographics" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Analyzing student demographics<a href="results.html#analyzing-student-demographics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>   </p>
+<p>Let’s analyze the student demographic data now that we have a clear understanding of standardized test scores. As a reminder, we are only focused on students from grades 3-8.
+   </p>
 <div id="race-at-the-citywide-level" class="section level3 hasAnchor" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Race at the citywide level<a href="results.html#race-at-the-citywide-level" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>   </p>
-<div class="echarts4r html-widget html-fill-item" id="htmlwidget-d79e42270fc722b27c17" style="width:100%;height:500px;"></div>
-<script type="application/json" data-for="htmlwidget-d79e42270fc722b27c17">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"legend":{"data":["Asian","Black","Hispanic","White","Other"],"show":true,"type":"plain","right":0,"orient":"vertical","top":50},"series":[{"name":"percentage","type":"pie","radius":["50%","70%"],"itemStyle":{"borderRadius":10,"borderColor":"#fff","borderWidth":0.5},"data":[{"value":0.1818145280637012,"name":"Asian"},{"value":0.206917340074228,"name":"Black"},{"value":0.415692310953227,"name":"Hispanic"},{"value":0.1680276595323091,"name":"White"},{"value":0.02594785378954487,"name":"Other"}]}],"toolbox":{"feature":{"restore":[],"magicType":[],"dataView":[],"saveAsImage":[]}},"tooltip":{"trigger":"axis"},"color":["#EFF3FF","#BDD7E7","#6BAED6","#3182BD","#08519C"],"title":[{"left":"center","top":5,"text":"Citywide Racial Demographics of NYC Students","subtext":"Using aggregated data from 2018, 2019, and 2022"}]},"dispose":true},"evals":[],"jsHooks":[]}</script>
+<div class="echarts4r html-widget html-fill-item" id="htmlwidget-4ec015dc77d69f33212e" style="width:100%;height:500px;"></div>
+<script type="application/json" data-for="htmlwidget-4ec015dc77d69f33212e">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"legend":{"data":["Asian","Black","Hispanic","White","Other"],"show":true,"type":"plain","right":0,"orient":"vertical","top":50},"series":[{"name":"percentage","type":"pie","radius":["50%","70%"],"itemStyle":{"borderRadius":10,"borderColor":"#fff","borderWidth":0.5},"data":[{"value":0.1818145280637012,"name":"Asian"},{"value":0.206917340074228,"name":"Black"},{"value":0.415692310953227,"name":"Hispanic"},{"value":0.1680276595323091,"name":"White"},{"value":0.02594785378954487,"name":"Other"}]}],"toolbox":{"feature":{"restore":[],"magicType":[],"dataView":[],"saveAsImage":[]}},"tooltip":{"trigger":"axis"},"color":["#EFF3FF","#BDD7E7","#6BAED6","#3182BD","#08519C"],"title":[{"left":"center","top":5,"text":"Citywide Racial Demographics of NYC Students","subtext":"Using aggregated data from 2018, 2019, and 2022"}]},"dispose":true},"evals":[],"jsHooks":[]}</script>
 <p>       </p>
 </div>
 <div id="other-demographics-at-the-citywide-level" class="section level3 hasAnchor" number="4.2.2">
 <h3><span class="header-section-number">4.2.2</span> Other demographics at the citywide level<a href="results.html#other-demographics-at-the-citywide-level" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>   </p>
-<div class="echarts4r html-widget html-fill-item" id="htmlwidget-0263b9ab8b0c6b3c3cb5" style="width:100%;height:500px;"></div>
-<script type="application/json" data-for="htmlwidget-0263b9ab8b0c6b3c3cb5">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"yAxis":[{"show":true}],"xAxis":[{"data":["2018","2019","2022"],"type":"category","boundaryGap":true}],"legend":{"data":["English language learners","Students with disabilities","Students living in poverty","Economic Need Index"],"show":true,"type":"plain","orient":"horizontal","bottom":10},"series":[{"data":[{"value":["2018","0.1537201"]},{"value":["2019","0.1490164"]},{"value":["2022","0.1626084"]}],"name":"English language learners","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp1"},{"data":[{"value":["2018","0.2008541"]},{"value":["2019","0.2052381"]},{"value":["2022","0.1986964"]}],"name":"Students with disabilities","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp2"},{"data":[{"value":["2018","0.7465891"]},{"value":["2019","0.7317927"]},{"value":["2022","0.7229357"]}],"name":"Students living in poverty","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp3"},{"data":[{"value":["2018","0.7282144"]},{"value":["2019","0.7247252"]},{"value":["2022","0.7215998"]}],"name":"Economic Need Index","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp4"}],"toolbox":{"feature":{"restore":[],"magicType":{"type":["line"]},"dataView":[],"saveAsImage":[]}},"tooltip":{"trigger":"axis"},"color":["#EFF3FF","#BDD7E7","#6BAED6","#2171B5"]},"dispose":true},"evals":[],"jsHooks":[]}</script>
+<div class="echarts4r html-widget html-fill-item" id="htmlwidget-36b2c9b326c9b1b32f50" style="width:100%;height:500px;"></div>
+<script type="application/json" data-for="htmlwidget-36b2c9b326c9b1b32f50">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"yAxis":[{"show":true}],"xAxis":[{"data":["2018","2019","2022"],"type":"category","boundaryGap":true}],"legend":{"data":["English language learners","Students with disabilities","Students living in poverty","Economic Need Index"],"show":true,"type":"plain","orient":"horizontal","bottom":10},"series":[{"data":[{"value":["2018","0.1537201"]},{"value":["2019","0.1490164"]},{"value":["2022","0.1626084"]}],"name":"English language learners","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp1"},{"data":[{"value":["2018","0.2008541"]},{"value":["2019","0.2052381"]},{"value":["2022","0.1986964"]}],"name":"Students with disabilities","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp2"},{"data":[{"value":["2018","0.7465891"]},{"value":["2019","0.7317927"]},{"value":["2022","0.7229357"]}],"name":"Students living in poverty","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp3"},{"data":[{"value":["2018","0.7282144"]},{"value":["2019","0.7247252"]},{"value":["2022","0.7215998"]}],"name":"Economic Need Index","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","stack":"grp4"}],"toolbox":{"feature":{"restore":[],"magicType":{"type":["line"]},"dataView":[],"saveAsImage":[]}},"tooltip":{"trigger":"axis"},"color":["#EFF3FF","#BDD7E7","#6BAED6","#2171B5"]},"dispose":true},"evals":[],"jsHooks":[]}</script>
 <p>   </p>
 </div>
 <div id="descriptive-statistics-diversity-scores" class="section level3 hasAnchor" number="4.2.3">
@@ -1864,6 +1709,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

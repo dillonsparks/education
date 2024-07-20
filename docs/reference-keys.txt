@@ -41,3 +41,5 @@ linear-regression-math-scores
 glm-english
 glm-math
 main-takeaways
+tab:unnamed-chunk-6
+tab:unnamed-chunk-7

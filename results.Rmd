@@ -28,7 +28,7 @@ In order to investigate the larger question of how student demographics impact t
 
 ### Descriptive Statistics
 
-First, we'll start off by looking at a few descriptive statistics to see what they tell us about the Math and ELA test scores. The tables below contain basic descriptive statistics for each exam over the years. Each data point, i.e. test score, represents the mean score from grades 3-8 in the respective exam.
+First, we'll start off by looking at a few descriptive statistics to see what they tell us about the Math and ELA test scores. The tables below contain basic descriptive statistics for each exam over the years. Each data point is the mean test score at a given school from grades 3-8 for the respective exam.
 
 ```{r}
 
@@ -49,8 +49,8 @@ get_desc_stat = function(df, year, stat, subject) {
    desc_stat = var(data) |> round(digits = 2)
  }
   
-  else if (stat == "sd") {
-    desc_stat = sd(data)  |> round (digits = 2)
+  else if (stat == "median") {
+    desc_stat = median(data)  |> round (digits = 2)
   }
   
   else if (stat == "mean") {
@@ -105,26 +105,41 @@ get_stat_matrix = function(df, years, stats, subject) {
   return(stat_df)
 }
 
-desc_stats = c("min", "max", "mean", "sd", "var","kurtosis", "skewness", "Shapiro-Wilk p value")
+desc_stats = c("min", "max", "median", "var", "skewness", "Shapiro-Wilk p value")
 test_years = c("2018", "2019", "2022")
 
-formattable(get_stat_matrix(school, test_years, desc_stats, "Math"))
+
+
+knitr::kable(formattable(get_stat_matrix(school, test_years, desc_stats, "Math")), caption = "Descriptive Statistics for Math Scores by Year")
 
 ```
 
 Here are a few notes about this table:
 
--   The p-value for our Shapiro-Wilk normality test is 0 each year. This means the distribution of test scores is not normal in any year, and we must keep this in mind for any analyses/visualizations done with this data.
+-   The p-value for our Shapiro-Wilk normality test is approximately 0 each year. This means that we have significant evidence to reject the null-hypothesis that our data is normally distributed. Since our scores are not normal in any year, we must keep this in mind for any analyses/visualizations done with this data.
 
--   2022 was an interesting year because    
+-   2022 was an interesting year because it had the lowest max and median, yet it still had the highest variance. This might suggest that scores were lower than previous years, yet more spread out. The skewness was also lowest closest to 0 in 2022, which suggests our scores were more symmetrical than in previous years. 
+
+-   Skewness values above 0.5 in 2018 and 2019 means the data was slightly positively skewed in those years. In other words, the scores were slightly more concentrated at the higher end of the scale in these years. 
+
+
+
+
 
 ```{r}
-formattable(get_stat_matrix(school, test_years, desc_stats, "ELA"))
+knitr::kable(formattable(get_stat_matrix(school, test_years, desc_stats, "ELA")), caption = "Descriptive Statistics for ELA Scores by Year")
 ```
+
+Looking at the table for our ELA scores, here are a few more takeaways:
+
+-   Again, p-value for our Shapiro-Wilk normality test is approximately 0 each year. This means our ELA scores are also not normal in any year.
+-   The data follows a similar trend to Math scores in that 2022 had the highest variance and lowest skew of the years observed. 
+-   The variances among ELA scores was comparatively lower than the corresponding variances for Math scores each year, though they followed similar trends over the years. The same is true for skewness. This means the scores for ELA were relatively less spread out and more symmetrical. 
+
 
 ### Reading vs. Math Scatterplot
 
-In investigating the relationship between Reading and Math scores, we started very broad by asking ourselves: <b> is there a correlation between success on Math & success on ELA? </b> We chose to break this down at the school level, because there is more data for us to work with compared to scores at the district level.
+In investigating the relationship between Reading and Math scores, we started with the big picture question: <b> is there a correlation between success on Math & success on ELA? </b> We chose to break this down at the school level, because there is more data for us to work with compared to scores at the district level.
 
    
 
@@ -182,7 +197,7 @@ formattable(get_corr_matrix(school, c("2018", "2019", "2022")))
 
    
 
-Looking at this table, we can see that the linear relationship between scores on the two exams is fairly strong, as expected. Furthermore, the correlation coefficient was slightly lower in 2022 as we saw from our scatterplot. Generally speaking, we know that a relatively high achieveing Math school also did well on ELA (and vice-versa). However, this leads us to wonder <b> is there a difference between Math and ELA scores over the years?</b>
+Looking at this table, we can see that the linear relationship between scores on the two exams is fairly strong, as expected. Furthermore, the correlation coefficient was slightly lower in 2022 as we saw from our scatterplot. Generally speaking, we know that a relatively high achieving Math school also did well on ELA (and vice-versa). However, this leads us to wonder <b> is there a difference between Math and ELA scores over the years?</b>
 
    
 
@@ -221,14 +236,14 @@ Looking at our density histograms, we can see that there is a lot of overlap bet
 
    
 
-In order to test the significance of the difference in test scores, we can utilize the Wilcox Test to estimate the difference . We cannot use the traditional paired t-test because our data is not normal. Our null-hypothesis is that the two sample means are equal (or that the test scores for ELA and Math are the same).
+We can utilize the Wilcox Test to estimate the difference between median Math and ELA scores and determine the significance of said difference. We cannot use the traditional paired t-test because our data is not normal. The following table contains a 99% confidence interval for the difference between median scores in each year, in addition to the p-value for the corresponding test. Our null-hypothesis is that the two sample means are equal (or that the test scores for ELA and Math are the same).
 
    
 
 ```{r echo=FALSE}
-get_wilcox_test = function(year, df) {
-  x = df |> filter(year == year, Test == "Math") |> pull(score)
-  y = df |> filter(year == year, Test == "ELA") |> pull(score)
+get_wilcox_test = function(y, df) {
+  x = df |> filter(year == y, Test == "Math") |> pull(score)
+  y = df |> filter(year == y, Test == "ELA") |> pull(score)
   test = wilcox.test(x,
        y, 
        conf.int = TRUE, 
@@ -246,9 +261,9 @@ get_conf_int_table = function(df) {
   for (i in 1:num_years) {
     current_year = unique(df$year)[i]
     conf_int = get_wilcox_test(current_year, df)$conf.int
-    conf_int_matrix[i,1] = conf_int[1] |> round(digits = 3)
-    conf_int_matrix[i,2] = conf_int[2] |> round(digits = 3)
-    conf_int_matrix[i,3] = get_wilcox_test(current_year, df)$p.value |> round(digits = 3)
+    conf_int_matrix[i,1] = conf_int[1] |> round(digits = 2)
+    conf_int_matrix[i,2] = conf_int[2] |> round(digits = 2)
+    conf_int_matrix[i,3] = get_wilcox_test(current_year, df)$p.value |> round(digits = 2)
     
   }
   
@@ -264,16 +279,19 @@ get_conf_int_table(scores)
 
    
 
-Looking at the result of our test for each year (<b> p = 0 < 0.01 </b>), we can reject the null hypothesis that our two sample means are the same, even at the 1% level of significance! Therefore, we have evidence of a statistically significant difference between the median Math & ELA scores in each year observed. It is notable that the 99% confidence interval, (-2.671, -2.384), is the same for each year. Thus, we are 99% confident that the true median difference between Math and ELA scores is between (-2.671, -2.384). 
+Looking at the result of our test for each year reveals: $$p \approx 0 < 0.01$$ Thus, we can reject the null hypothesis that our two sample means are the same, even at the 1% level of significance! Therefore, we have evidence of a statistically significant difference between the median Math & ELA scores in each year observed. 
+
+It is notable that the 99% confidence interval for 2022, (-5.67, -5.16), is much larger than other years. This means we are 99% confident that the true median difference between Math and ELA scores at a given school in 2022 is between -5.67 and -5.16. In the context of standardized testing, this difference in scores is relatively small each year-- however, it is important for our analyses that Math scores are consistently lower than ELA scores, and that this difference is statistically significant each year despite the negligible difference in some years. 
 
 ### Main Takeaways
 
-In summary, we know schools that performed relatively well on one exam were also successful on the other. Furthermore, there is evidence that students performed about 3 points better on ELA than Math, each year. 
+In summary, we know schools that performed relatively well on one exam were also successful on the other. This conclusion is fairly intuitive, though it was still important to analyze the data before assuming so. Furthermore, there is evidence to suggest schools performed better on ELA than Math each year, though this difference was quite small in some years. This is interesting because the linear relationship between scores is very strong, yet there is still a statistically significant difference between scores. Lastly, every test, table, and visualization revealed that 2022 was a fairly odd year. This is likely related to the break from standardized testing due to the onset of the Covid-19 global pandemic. The virus's impact on education will be seen for many years to come and extends far beyond the analysis of standardized test scores done as part of this project. 
 
    
 
 ## Analyzing student demographics
 
+Let's analyze the student demographic data now that we have a clear understanding of standardized test scores. As a reminder, we are only focused on students from grades 3-8. 
    
 
 ### Race at the citywide level
@@ -429,19 +447,6 @@ get_significant_values = function(df, column) {
   }
 }
 
-generate_column_formatter <- function(df, column) {
-  sig_vals <- get_significant_values(df, column)
-  
-  formatter("span",
-            style = x ~ style(
-              display = "block",
-              padding = "5px",
-              `border-radius` = "2px",
-              
-              `text-align` = "center",
-              `vertical-align` = "middle"
-            ))
-}
 
 
 
